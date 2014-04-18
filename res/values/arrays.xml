@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="audiostream">
+        <item>Notification</item>
+        <item>Music</item>
+        <item>Ringer</item>
+        <item>Alarm</item>
+    </string-array>
+    
+    <string-array name="calltask">
+        <item>Play normally</item>
+        <item>Use quiet volume</item>
+        <item>Do not play</item>
+    </string-array>
+    
+    <string-array name="shuffleaction">
+        <item>Shuffle all kanmusu clips</item>
+        <item>Shuffle only selected kanmusu clips</item>
+        <item>Shuffle only current kanmusu clips</item>
+    </string-array>
+</resources>

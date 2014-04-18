@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android" 
+    android:initialLayout="@layout/widget_clocklarge"
+    android:minHeight="94dp"
+    android:minWidth="490dp"
+    android:minResizeHeight="94dp"
+    android:minResizeWidth="490dp"
+    android:updatePeriodMillis="0"
+	android:resizeMode="horizontal|vertical" >  
+
+</appwidget-provider>

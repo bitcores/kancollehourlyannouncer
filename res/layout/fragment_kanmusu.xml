@@ -1,0 +1,85 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp" >
+    
+    <LinearLayout 
+        android:id="@+id/dirSelect"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/back"
+        android:padding="3dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="3dp" >
+        
+	    <TextView
+	        android:id="@+id/dirTitle"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="@string/dirtitle"
+	        style="@style/titletext" />
+	    
+	    <TextView
+	        android:id="@+id/dirText"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_marginLeft="5dp"
+	        style="@style/medtext" />
+	    
+    </LinearLayout>
+        
+    <Button
+        android:id="@+id/scanButton"
+        style="@style/button"
+        android:layout_width="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:text="@string/scandir" />
+    
+    <CheckBox
+        android:id="@+id/selectAllBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/dirSelect"
+        android:layout_marginTop="5dp"
+        android:text="@string/selectall" />
+    
+    <ScrollView
+        android:id="@+id/kanmusuScroll"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:layout_above="@+id/saveButton"
+        android:layout_below="@+id/selectAllBox"
+        android:fadeScrollbars="false"
+        android:verticalScrollbarPosition="left" >
+        
+	    <TableLayout
+	        android:id="@+id/kanmusuTable"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_marginLeft="5dp" >       
+	    </TableLayout>
+	    
+    </ScrollView>
+	
+    <Button
+        android:id="@+id/enableButton"
+        style="@style/button"
+        android:layout_width="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="5dp" />
+    
+    <Button
+        android:id="@+id/saveButton"
+        style="@style/button"
+        android:layout_width="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="5dp"
+        android:text="@string/savekanmusu" />
+
+</RelativeLayout>

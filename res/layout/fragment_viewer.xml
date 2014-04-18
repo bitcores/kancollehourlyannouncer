@@ -1,0 +1,72 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp"
+    android:background="#FFECECEC" >
+         
+	<LinearLayout
+	    android:id="@+id/imagelayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:minWidth="300dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginLeft="260dp"
+	    >
+		<ImageView
+	        android:id="@+id/viewerimage"
+	        android:layout_width="match_parent"
+	        android:layout_height="match_parent"              	   
+	        android:layout_marginTop="10dp"
+	        android:layout_marginBottom="10dp"
+	        android:adjustViewBounds="true"
+	        android:scaleType="fitCenter"
+	        android:contentDescription="@string/bgdesc"
+	        android:saveEnabled="false"
+	        />
+	</LinearLayout>
+	
+
+    <Spinner
+	    android:id="@+id/kanmususpinner"
+	    android:layout_width="250dp"
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentLeft="true"
+	    android:layout_alignParentTop="true"
+	    android:saveEnabled="false"
+	    />
+    
+    <TextView
+	    android:id="@+id/msgbox"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_marginLeft="5dp"
+	    android:layout_below="@+id/kanmususpinner"
+		/>
+    
+    <ProgressBar
+	    android:id="@+id/playprogress"
+	    style="?android:attr/progressBarStyleHorizontal"
+	    android:layout_width="250dp"
+	    android:layout_height="10dp"
+	     android:layout_alignLeft="@+id/msgbox"
+	    android:layout_below="@+id/msgbox"
+        />
+    
+    <ScrollView
+        android:id="@+id/playerscrollview"
+        android:layout_width="250dp"
+        android:layout_height="fill_parent"
+        android:layout_alignLeft="@+id/playprogress"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/playprogress"
+        android:fadeScrollbars="false" >
+
+	    <TableLayout
+	        android:id="@+id/playertable"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	         >
+	    </TableLayout>
+	</ScrollView>
+
+</RelativeLayout>
