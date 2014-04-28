@@ -8,6 +8,7 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.util.Log;
 
 public class AlarmAdapter {
@@ -32,7 +33,12 @@ public class AlarmAdapter {
 		Intent intent = new Intent(context, ServiceTask.class);
 		pendingIntent = PendingIntent.getService(context, 55559, intent, PendingIntent.FLAG_CANCEL_CURRENT);
 		AlarmManager alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
-		alarmManager.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pendingIntent);
+		//	Kitkat uses inexact alarms unless setExact is used
+		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
+			alarmManager.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pendingIntent);
+		} else {
+			alarmManager.setExact(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pendingIntent);
+		}
 	}
 	
 	public void stopAlarm(Context context) {

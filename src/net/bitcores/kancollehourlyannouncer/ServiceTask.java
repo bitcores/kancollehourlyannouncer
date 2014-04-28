@@ -39,7 +39,7 @@ public class ServiceTask extends Service {
 		pm = (PowerManager)getSystemService(ServiceTask.POWER_SERVICE);
 		wl = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "Released");
 		wl.acquire(10000);
-		
+
 		alarmAdapter = new AlarmAdapter();
 		settingsAdapter = new SettingsAdapter();
 		
