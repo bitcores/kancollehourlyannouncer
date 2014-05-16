@@ -56,13 +56,8 @@ public class ServiceTask extends Service {
 				int end = SettingsAdapter.quiet_end;			
 				int quiet = 0;
 				int rand = 0;
-				if (SettingsAdapter.kanmusu_use.size() > 1) {
-					int max = SettingsAdapter.kanmusu_use.size();
-					Random r = new Random();
-					rand = r.nextInt(max);
-				}
-				SettingsAdapter.hourly_kanmusu = SettingsAdapter.kanmusu_use.get(rand);
-				String filepath = SettingsAdapter.kancolle_dir + "/" + SettingsAdapter.hourly_kanmusu + "/" + mp3 + ".mp3";
+				boolean checkLine = false;
+				int checkBreak = 0;
 				
 				// Getting phone call state
 				TelephonyManager tm = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
@@ -92,44 +87,66 @@ public class ServiceTask extends Service {
 						}
 					}
 					
-					// Check the file exists
-					File checkfile = new File(filepath);
-					if (checkfile.exists()) {
-						try {
-							// Set up mediaplayer
-							mp = new MediaPlayer();
-							mp.setOnCompletionListener(new OnCompletionListener() {
-								@Override
-								public void onCompletion(MediaPlayer mp) {
-									Log.i("kancolle announcer", "ServiceTask MediaPlayer released");
-									mp.release();
-								}
-							});
-							FileInputStream fis = new FileInputStream(filepath);			
-							mp.setDataSource(fis.getFD());
-							fis.close();
-							// Setting the volume type and quiet volume
-							int stream = AudioManager.STREAM_NOTIFICATION;
-							if (SettingsAdapter.use_volume == 1) {
-								stream = AudioManager.STREAM_MUSIC;
-							} else if (SettingsAdapter.use_volume == 2) {
-								stream = AudioManager.STREAM_RING;
-							} else if (SettingsAdapter.use_volume == 3) {
-								stream = AudioManager.STREAM_ALARM;
-							} 
-							mp.setAudioStreamType(stream);	
-							if (quiet == 1) {
-								float volume = (float) (1 - (Math.log(100 - SettingsAdapter.quiet_volume) / Math.log(100)));
-								mp.setVolume(volume, volume);
-							}
-							mp.prepare();
+					while (!checkLine)
+					{
+						if (SettingsAdapter.kanmusu_use.size() > 1) {
+							int max = SettingsAdapter.kanmusu_use.size();
+							Random r = new Random();
+							rand = r.nextInt(max);
+						}						
+						String filepath = SettingsAdapter.kancolle_dir + "/" + SettingsAdapter.hourly_kanmusu + "/" + mp3 + ".mp3";
+						
+						// Check the file exists
+						File checkfile = new File(filepath);
+						if (checkfile.exists()) {
+							checkLine = true;
+							SettingsAdapter.hourly_kanmusu = SettingsAdapter.kanmusu_use.get(rand);
 							
-							Log.i("kancolle announcer", "ServiceTask Playing file: " + filepath);
-							mp.start();						
-						} catch (Exception e) {
-							Log.e("kancolle announcer", "ServiceTask Error playing file: " + filepath);
-						}
-					}					
+							try {
+								// Set up mediaplayer
+								mp = new MediaPlayer();
+								mp.setOnCompletionListener(new OnCompletionListener() {
+									@Override
+									public void onCompletion(MediaPlayer mp) {
+										Log.i("kancolle announcer", "ServiceTask MediaPlayer released");
+										mp.release();
+									}
+								});
+								FileInputStream fis = new FileInputStream(filepath);			
+								mp.setDataSource(fis.getFD());
+								fis.close();
+								// Setting the volume type and quiet volume
+								int stream = AudioManager.STREAM_NOTIFICATION;
+								if (SettingsAdapter.use_volume == 1) {
+									stream = AudioManager.STREAM_MUSIC;
+								} else if (SettingsAdapter.use_volume == 2) {
+									stream = AudioManager.STREAM_RING;
+								} else if (SettingsAdapter.use_volume == 3) {
+									stream = AudioManager.STREAM_ALARM;
+								} 
+								mp.setAudioStreamType(stream);	
+								if (quiet == 1) {
+									float volume = (float) (1 - (Math.log(100 - SettingsAdapter.quiet_volume) / Math.log(100)));
+									mp.setVolume(volume, volume);
+								}
+								mp.prepare();
+								
+								Log.i("kancolle announcer", "ServiceTask Playing file: " + filepath);
+								mp.start();						
+							} catch (Exception e) {
+								Log.e("kancolle announcer", "ServiceTask Error playing file: " + filepath);
+							}
+						} else {
+							// If kanmusu doesn't have the time clip then remove it from the use list
+							SettingsAdapter.kanmusu_use.remove(rand);
+							
+							// Break out of the loop checking for files if more than four failures
+							checkBreak++;
+							if (checkBreak > 4) {
+								break;
+							}
+						}				
+					}
 				}
 				
 				settingsAdapter.saveSettings(ServiceTask.this, 0);
