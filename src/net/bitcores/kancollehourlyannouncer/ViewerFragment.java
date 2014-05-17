@@ -15,6 +15,7 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -298,15 +299,43 @@ public class ViewerFragment extends Fragment {
 			Dialog imageDialog = new Dialog(context);
 			View dialogView = viewerInflater.inflate(R.layout.dialog_image, null);
 			ImageView dialogImage = (ImageView)dialogView.findViewById(R.id.dialogImage);
-
+			
+			BitmapFactory.Options options = new BitmapFactory.Options();
 			String filepath = currentDir + "/Image/" + imageList.get(currentImg);
 			File checkfile = new File(filepath);
 			if (checkfile.exists()) {
-				Bitmap bitmap = BitmapFactory.decodeFile(filepath);
+				Bitmap bitmap = BitmapFactory.decodeFile(filepath, options);
 				dialogImage.setImageBitmap(bitmap);
 			}
 			imageDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
 			imageDialog.setContentView(dialogView);
+			
+			// Scaling the popup image to fit the screen
+			// I hope there is a simpler way to do this, but I cant think of it so here we are
+			View content = context.findViewById(Window.ID_ANDROID_CONTENT);
+			float displayWidth = content.getWidth() - 5;
+			float displayHeight = content.getHeight() - 5;
+			float widthRatio = (float) options.outWidth / (float) options.outHeight;
+			float heightRatio = (float) options.outHeight / (float)options.outWidth;			
+			int ratioedWidth = (int) (displayHeight / heightRatio);
+			int ratioedHeight = (int) (displayWidth / widthRatio);
+						
+			if (displayWidth > options.outWidth && displayHeight > options.outHeight) {	
+				ViewGroup.LayoutParams dialogParams = dialogView.getLayoutParams();	
+	
+				if (((Math.round(displayHeight / heightRatio)) > displayWidth && displayWidth > displayHeight) || ((Math.round(displayWidth / widthRatio)) < displayHeight) && displayWidth < displayHeight) {
+					dialogParams.width = (int) displayWidth;
+					dialogParams.height = ratioedHeight; 
+					Log.i("kancolle announcer", "high width=" + displayWidth + " height=" + ratioedHeight);
+					
+				} else {
+					dialogParams.height = (int) displayHeight;
+					dialogParams.width = ratioedWidth;
+					Log.i("kancolle announcer", "wide width=" + ratioedWidth + " height=" + displayHeight);
+				}
+
+				dialogView.setLayoutParams(dialogParams);
+			}			
 			
 			imageDialog.show();
 			
