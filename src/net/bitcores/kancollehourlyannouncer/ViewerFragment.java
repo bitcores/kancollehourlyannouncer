@@ -296,7 +296,7 @@ public class ViewerFragment extends Fragment {
 	OnLongClickListener imgLongClickListener = new OnLongClickListener() {
 		@Override
 		public boolean onLongClick(View view) {
-			Dialog imageDialog = new Dialog(context);
+			final Dialog imageDialog = new Dialog(context);
 			View dialogView = viewerInflater.inflate(R.layout.dialog_image, null);
 			ImageView dialogImage = (ImageView)dialogView.findViewById(R.id.dialogImage);
 			
@@ -313,8 +313,8 @@ public class ViewerFragment extends Fragment {
 			// Scaling the popup image to fit the screen
 			// I hope there is a simpler way to do this, but I cant think of it so here we are
 			View content = context.findViewById(Window.ID_ANDROID_CONTENT);
-			float displayWidth = content.getWidth() - 5;
-			float displayHeight = content.getHeight() - 5;
+			float displayWidth = content.getWidth() - 8;
+			float displayHeight = content.getHeight() - 8;
 			float widthRatio = (float) options.outWidth / (float) options.outHeight;
 			float heightRatio = (float) options.outHeight / (float)options.outWidth;			
 			int ratioedWidth = (int) (displayHeight / heightRatio);
@@ -335,7 +335,17 @@ public class ViewerFragment extends Fragment {
 				}
 
 				dialogView.setLayoutParams(dialogParams);
-			}			
+			}
+			
+			// Long press the image to dismiss it
+			dialogImage.setOnLongClickListener(new OnLongClickListener() {
+				@Override
+				public boolean onLongClick(View view) {
+					imageDialog.dismiss();
+					return true;
+				}
+				
+			});
 			
 			imageDialog.show();
 			
