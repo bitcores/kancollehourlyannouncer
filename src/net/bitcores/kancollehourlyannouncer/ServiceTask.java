@@ -94,7 +94,7 @@ public class ServiceTask extends Service {
 							Random r = new Random();
 							rand = r.nextInt(max);
 						}						
-						String filepath = SettingsAdapter.kancolle_dir + "/" + SettingsAdapter.hourly_kanmusu + "/" + mp3 + ".mp3";
+						String filepath = SettingsAdapter.kancolle_dir + "/" + SettingsAdapter.kanmusu_use.get(rand) + "/" + mp3 + ".mp3";
 						
 						// Check the file exists
 						File checkfile = new File(filepath);
