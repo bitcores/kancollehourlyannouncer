@@ -32,8 +32,8 @@ public final class R {
         public static final int bgimage=0x7f090000;
         public static final int callSpinner=0x7f090018;
         public static final int callSpinnerTitle=0x7f090017;
-        public static final int clockBack=0x7f090024;
-        public static final int clockText=0x7f090025;
+        public static final int clockBack=0x7f090025;
+        public static final int clockText=0x7f090026;
         public static final int dialogImage=0x7f090002;
         public static final int dirSelect=0x7f090003;
         public static final int dirText=0x7f090005;
@@ -67,6 +67,7 @@ public final class R {
         public static final int startTimeLayout=0x7f09000f;
         public static final int viewerimage=0x7f09001d;
         public static final int widgetLayout=0x7f090023;
+        public static final int widgetLinear=0x7f090024;
     }
     public static final class layout {
         public static final int activity_main=0x7f030000;
