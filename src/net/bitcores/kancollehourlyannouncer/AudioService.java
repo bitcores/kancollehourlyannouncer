@@ -5,7 +5,10 @@ import java.io.FileInputStream;
 import java.util.Random;
 
 import android.app.Service;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
@@ -17,6 +20,7 @@ public class AudioService extends Service {
 	SettingsAdapter settingsAdapter;
 	ViewerFragment viewerFragment;
 	private static MediaPlayer mp;
+	private ServiceReceiver receiver;
 	
 	static String type;
 	static String file;
@@ -55,11 +59,28 @@ public class AudioService extends Service {
 			settingsAdapter.initSettings(AudioService.this);
 		}
 		
+		IntentFilter filter = new IntentFilter();
+		receiver = new ServiceReceiver();
+		filter.addAction("android.intent.action.CONFIGURATION_CHANGED");
+		registerReceiver(receiver, filter);
 	}
 	
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
+		if (receiver != null) {
+			unregisterReceiver(receiver);
+		}
+	}
+	
+	public class ServiceReceiver extends BroadcastReceiver {
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			Intent broadcastIntent = new Intent();
+			broadcastIntent.setAction("net.bitcores.kancollehourlyannouncer.UPDATE_WIDGET");
+			broadcastIntent.putExtra("placeholder", "data");
+			sendBroadcast(broadcastIntent);
+		}
 	}
 	
 	public void playEvent() {

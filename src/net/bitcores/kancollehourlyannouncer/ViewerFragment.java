@@ -15,7 +15,6 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -326,12 +325,10 @@ public class ViewerFragment extends Fragment {
 				if (((Math.round(displayHeight / heightRatio)) > displayWidth && displayWidth > displayHeight) || ((Math.round(displayWidth / widthRatio)) < displayHeight) && displayWidth < displayHeight) {
 					dialogParams.width = (int) displayWidth;
 					dialogParams.height = ratioedHeight; 
-					Log.i("kancolle announcer", "high width=" + displayWidth + " height=" + ratioedHeight);
 					
 				} else {
 					dialogParams.height = (int) displayHeight;
 					dialogParams.width = ratioedWidth;
-					Log.i("kancolle announcer", "wide width=" + ratioedWidth + " height=" + displayHeight);
 				}
 
 				dialogView.setLayoutParams(dialogParams);
