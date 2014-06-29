@@ -8,9 +8,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.RemoteViews;
 
-public class WidgetMProvider extends AppWidgetProvider {
+public class WidgetMLProvider extends AppWidgetProvider {
 	WidgetShare widgetShare;
-	String size = "m";
+	String size = "ml";
 
 	@Override
 	public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
@@ -24,7 +24,7 @@ public class WidgetMProvider extends AppWidgetProvider {
 		super.onReceive(context, intent);
 		String action = intent.getAction();
 		if (action.equals(WidgetShare.UPDATE_WIDGET)) {
-			ComponentName kancolleWidget = new ComponentName(context, WidgetMProvider.class);
+			ComponentName kancolleWidget = new ComponentName(context, WidgetMLProvider.class);
 			AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
 			int[] appWidgetIds = appWidgetManager.getAppWidgetIds(kancolleWidget);
 			
@@ -42,7 +42,7 @@ public class WidgetMProvider extends AppWidgetProvider {
 	
 	
 	public void sendUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-		RemoteViews widgetView = new RemoteViews(context.getPackageName(), R.layout.widget_clockmedium);
+		RemoteViews widgetView = new RemoteViews(context.getPackageName(), R.layout.widget_clockmediumlarge);
 		
 		widgetShare = new WidgetShare();
 		widgetShare.updateWidget(context, appWidgetManager, appWidgetIds, widgetView, size);

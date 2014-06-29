@@ -2,10 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="net.bitcores.kancollehourlyannouncer"
     android:versionCode="1"
-    android:versionName="1.1.4b" >
+    android:versionName="1.1.4c" >
 
     <uses-sdk
-        android:minSdkVersion="16"
+        android:minSdkVersion="13"
         android:targetSdkVersion="19" />
     
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
@@ -83,6 +83,33 @@
         	<meta-data
         	    android:name="android.appwidget.provider"
         	    android:resource="@xml/widgetlarge_info" 
+        	/>
+        </receiver>
+        <receiver
+            android:icon="@drawable/ic_launcher"
+            android:label="Kancolle Clock Medium Large"
+            android:name=".WidgetMLProvider" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="net.bitcores.kancollehourlyannouncer.UPDATE_WIDGET" />
+        	</intent-filter>
+        	<meta-data
+        	    android:name="android.appwidget.provider"
+        	    android:resource="@xml/widgetmediumlarge_info" 
+        	/>
+        </receiver>
+        <receiver
+            android:icon="@drawable/ic_launcher"
+            android:label="Kancolle Clock Resizable"
+            android:name=".WidgetRProvider"
+            android:enabled="@bool/is_post_api_16" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="net.bitcores.kancollehourlyannouncer.UPDATE_WIDGET" />
+        	</intent-filter>
+        	<meta-data
+        	    android:name="android.appwidget.provider"
+        	    android:resource="@xml/widgetresizable_info" 
         	/>
         </receiver>
     </application>

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android" 
-    android:initialLayout="@layout/widget_clocklarge"
-    android:minHeight="95dp"
-    android:minWidth="470dp"
-    android:minResizeHeight="95dp"
-    android:minResizeWidth="470dp"
+    android:initialLayout="@layout/widget_clockmedium"
+    android:minHeight="40dp"
+    android:minWidth="280dp"
+    android:minResizeHeight="40dp"
+    android:minResizeWidth="220dp"
     android:updatePeriodMillis="0"
 	android:resizeMode="horizontal|vertical"
 	android:widgetCategory="keyguard|home_screen" >  
