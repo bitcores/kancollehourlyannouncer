@@ -31,5 +31,16 @@
     <string name="rtoneset">Ringtone set</string>
     <string name="rtonesetlist">Set clip as notification ringtone</string>
     <string name="shufflespinner">Choose Shuffle Type</string>
+    <string name="minutefill">: 00</string>
+    <string name="columnfill">columns</string>
+    <string name="rowfill">rows</string>
+    <string name="columnstitle">Homescreen Columns</string>
+    <string name="rowstitle">Homescreen Rows</string>
+    <string name="starttimesub">Quiet Hours Volume will be used on this hour</string>
+    <string name="endtimesub">Quiet Hours Volume will not be used on this hour</string>
+    <string name="startpicktitle">Select Start Hour</string>
+    <string name="endpicktitle">Select End Hour</string>
+    <string name="columnspicktitle">Select number of columns</string>
+    <string name="rowspicktitle">Select number of rows</string>
 
 </resources>

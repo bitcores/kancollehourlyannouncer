@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/pickerDialogLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+	
+    <LinearLayout
+        android:id="@+id/pickerLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true" >
+	    <NumberPicker
+	        android:id="@+id/numberPicker"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_gravity="center_vertical" />
+	
+	    <TextView
+	        android:id="@+id/minuteText"
+	        style="@style/bigtext"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_gravity="center_vertical" />
+	    
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/subText"
+        style="@style/medtext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/pickerLayout"
+        android:layout_centerHorizontal="true" />
+
+</RelativeLayout>

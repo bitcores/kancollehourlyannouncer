@@ -1,6 +1,5 @@
 package net.bitcores.kancollehourlyannouncer;
 
-import android.os.Build;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;

@@ -78,12 +78,20 @@
         <item name="android:textSize">36sp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:color">#000000</item>
+        <item name="android:shadowColor">#202020</item>
+        <item name="android:shadowDx">1</item>
+        <item name="android:shadowDy">1</item>
+        <item name="android:shadowRadius">2</item>
     </style>
     
     <style name="bigclocktext" parent="AppBaseTheme">
         <item name="android:textSize">64sp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:color">#000000</item>
+        <item name="android:shadowColor">#202020</item>
+        <item name="android:shadowDx">1</item>
+        <item name="android:shadowDy">1</item>
+        <item name="android:shadowRadius">2</item>
     </style>
     
     <style name="button" parent="AppBaseTheme">
