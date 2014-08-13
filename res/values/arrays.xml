@@ -17,5 +17,6 @@
         <item>Shuffle all kanmusu clips</item>
         <item>Shuffle only selected kanmusu clips</item>
         <item>Shuffle only current kanmusu clips</item>
+        <item>Shuffle viewer selected kanmusu clips</item>
     </string-array>
 </resources>

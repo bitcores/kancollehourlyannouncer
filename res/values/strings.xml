@@ -29,7 +29,11 @@
     <string name="useshuffle">Shuffle Notification Ringtone</string>
     <string name="rtoneunset">Ringtone set, Shuffle disabled</string>
     <string name="rtoneset">Ringtone set</string>
+    <string name="rtoneshufset">Shuffle group set</string>
+    <string name="rtoneshufenset">Shuffle group set, Shuffle enabled</string>
     <string name="rtonesetlist">Set clip as notification ringtone</string>
+    <string name="rtonesetkanmusu">Set this kanmusu\'s clips as shuffle group</string>
+    <string name="viewerkantext">Viewer kanmusu:</string>
     <string name="shufflespinner">Choose Shuffle Type</string>
     <string name="minutefill">: 00</string>
     <string name="columnfill">columns</string>

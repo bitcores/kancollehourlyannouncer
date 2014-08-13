@@ -31,28 +31,26 @@ import android.widget.TextView;
 public class SettingsFragment extends Fragment {
 	SharedPreferences preferences;
 	SettingsAdapter settingsAdapter;
-	LayoutInflater pickerInflater;
 	MediaPlayer mp;
 	Activity context;
 	
 	private static Spinner mediaSpinner;
 	private static Spinner callSpinner;
-	private static Spinner shuffleSpinner;
 	private static CheckBox useQuietBox;	
 	private static TextView startTime;
 	private static TextView endTime;
 	private static SeekBar quietVolumeBar;
-		
+	
+	public static Spinner shuffleSpinner;
 	public static CheckBox useShuffleBox;
+	public static TextView shuffleViewerText;
 	public View rootView;
 	public String target = "";
 		
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		// We want to use this inflater for the picker popup
-		pickerInflater = inflater;
 		rootView = inflater.inflate(R.layout.fragment_settings, container, false);
-		
+
 		context = getActivity();
 		settingsAdapter = new SettingsAdapter();
 		preferences = context.getSharedPreferences(SettingsAdapter.PREF_FILE_NAME, Context.MODE_PRIVATE);
@@ -64,6 +62,7 @@ public class SettingsFragment extends Fragment {
 		useShuffleBox = (CheckBox)rootView.findViewById(R.id.shuffleBox);			
 		startTime = (TextView)rootView.findViewById(R.id.quietHoursStart);	
 		endTime = (TextView)rootView.findViewById(R.id.quietHoursEnd);
+		shuffleViewerText = (TextView)rootView.findViewById(R.id.shuffleViewerText);
 		
 		mediaSpinner.setSelection(SettingsAdapter.use_volume);
 		callSpinner.setSelection(SettingsAdapter.call_action);
@@ -95,6 +94,10 @@ public class SettingsFragment extends Fragment {
             	saveSettings();
         	}     
         });
+		
+		if (!SettingsAdapter.viewer_kanmusu.equals("")) {
+			shuffleViewerText.setText(context.getResources().getString(R.string.viewerkantext) + " " + SettingsAdapter.viewer_kanmusu);
+		}
 
 		return rootView;
 	}
@@ -160,7 +163,7 @@ public class SettingsFragment extends Fragment {
 	    titleView.setTextColor(context.getResources().getColor(android.R.color.black));
 	    titleView.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL);    
 	    
-	    View dialogView = pickerInflater.inflate(R.layout.dialog_numberpicker, null);
+	    View dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_numberpicker, (ViewGroup)context.findViewById(R.id.dialogImageLayout), false);
 		final NumberPicker numberPicker = (NumberPicker)dialogView.findViewById(R.id.numberPicker);
 		numberPicker.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
 		TextView minuteText = (TextView)dialogView.findViewById(R.id.minuteText);
@@ -244,6 +247,11 @@ public class SettingsFragment extends Fragment {
 		SettingsAdapter.use_volume = mediaSpinner.getSelectedItemPosition();	
 		SettingsAdapter.call_action = callSpinner.getSelectedItemPosition();
 		SettingsAdapter.shuffle_action = shuffleSpinner.getSelectedItemPosition();
+		
+		if (SettingsAdapter.shuffle_action == 3 && SettingsAdapter.viewer_kanmusu.equals("")) {
+			SettingsAdapter.viewer_kanmusu = ViewerFragment.currentKanmusu;
+			shuffleViewerText.setText(context.getResources().getString(R.string.viewerkantext) + " " + SettingsAdapter.viewer_kanmusu);
+		}
 		
 		if (useQuietBox.isChecked()) {
 			SettingsAdapter.use_quiet = 1;

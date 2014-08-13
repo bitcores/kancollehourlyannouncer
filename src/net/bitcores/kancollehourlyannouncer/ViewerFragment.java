@@ -46,8 +46,8 @@ public class ViewerFragment extends Fragment {
 	private static TableLayout playerTable;
 	private static ImageView playerImage;
 	private static String currentDir;
-	private static String currentKanmusu;
 	
+	public static String currentKanmusu;
 	public static ProgressBar pb;
 	public static Spinner kanmusuSpinner;
 	public Integer currentView;
@@ -62,10 +62,8 @@ public class ViewerFragment extends Fragment {
 		
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		// We want to use this inflater for the image popup
-		viewerInflater = inflater;
 		rootView = inflater.inflate(R.layout.fragment_viewer, container, false);
-				
+
 		context = getActivity();	
 		alarmAdapter = new AlarmAdapter();
 		settingsAdapter = new SettingsAdapter();
@@ -266,23 +264,39 @@ public class ViewerFragment extends Fragment {
 		@Override
 		public boolean onLongClick(View view) {
 			final Integer clipFile = view.getId();
-			final CharSequence[] listitem = { context.getResources().getString(R.string.rtonesetlist) };
+			final CharSequence[] listitem = { context.getResources().getString(R.string.rtonesetlist), context.getResources().getString(R.string.rtonesetkanmusu) };
 			AlertDialog.Builder listBuilder = new AlertDialog.Builder(context);
 			listBuilder.setItems(listitem, new DialogInterface.OnClickListener() {
-				public void onClick(DialogInterface dialog, int item) {
-					String filepath = currentDir + "/" + clipFile + ".mp3";
-
-					settingsAdapter.setRingtone(context, filepath, currentKanmusu, clipFile);
-
-					if (SettingsAdapter.use_shuffle == 1) {
-						SettingsAdapter.use_shuffle = 0;
+				public void onClick(DialogInterface dialog, int item) {				
+					if (item == 0) {
+						String filepath = currentDir + "/" + clipFile + ".mp3";						
+						settingsAdapter.setRingtone(context, filepath, currentKanmusu, clipFile);
+	
+						if (SettingsAdapter.use_shuffle == 1) {
+							SettingsAdapter.use_shuffle = 0;
+							settingsAdapter.saveSettings(context, 0);						
+							Toast.makeText(context, context.getResources().getString(R.string.rtoneunset), Toast.LENGTH_SHORT).show();
+						} else {
+							Toast.makeText(context, context.getResources().getString(R.string.rtoneset), Toast.LENGTH_SHORT).show();
+						}
+						
+						SettingsFragment.useShuffleBox.setChecked(false);
+					} else if (item == 1) {					
+						if (SettingsAdapter.use_shuffle == 0) {
+							SettingsAdapter.use_shuffle = 1;							
+							Toast.makeText(context, context.getResources().getString(R.string.rtoneshufenset), Toast.LENGTH_SHORT).show();
+						} else {
+							Toast.makeText(context, context.getResources().getString(R.string.rtoneshufset), Toast.LENGTH_SHORT).show();
+						}
+						
+						SettingsAdapter.viewer_kanmusu = currentKanmusu;
+						SettingsAdapter.shuffle_action = 3;
 						settingsAdapter.saveSettings(context, 0);						
-						Toast.makeText(context, context.getResources().getString(R.string.rtoneunset), Toast.LENGTH_SHORT).show();
-					} else {
-						Toast.makeText(context, context.getResources().getString(R.string.rtoneset), Toast.LENGTH_SHORT).show();
+						SettingsFragment.useShuffleBox.setChecked(true);
+						SettingsFragment.shuffleSpinner.setSelection(SettingsAdapter.shuffle_action);
+						SettingsFragment.shuffleViewerText.setText(context.getResources().getString(R.string.viewerkantext) + " " + SettingsAdapter.viewer_kanmusu);						
+						settingsAdapter.shuffleRingtone(context);
 					}
-					
-					SettingsFragment.useShuffleBox.setChecked(false);
 				}
 			});
 			AlertDialog alertList = listBuilder.create();
@@ -296,7 +310,7 @@ public class ViewerFragment extends Fragment {
 		@Override
 		public boolean onLongClick(View view) {
 			final Dialog imageDialog = new Dialog(context);
-			View dialogView = viewerInflater.inflate(R.layout.dialog_image, null);
+			View dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_image, (ViewGroup)context.findViewById(R.id.dialogImageLayout), false);
 			ImageView dialogImage = (ImageView)dialogView.findViewById(R.id.dialogImage);
 			
 			BitmapFactory.Options options = new BitmapFactory.Options();

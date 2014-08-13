@@ -36,6 +36,7 @@ public class SettingsAdapter {
 	public static Integer use_shuffle = 0;
 	public static Integer shuffle_action = 0;
 	public static String hourly_kanmusu = "";
+	public static String viewer_kanmusu = "";
 	public static List<String> full_list = new ArrayList<String>();
 	public static List<String> kanmusu_list = new ArrayList<String>();
 	public static List<String> kanmusu_select = new ArrayList<String>();
@@ -60,6 +61,7 @@ public class SettingsAdapter {
 		use_shuffle = preferences.getInt("use_shuffle", 0);
 		shuffle_action = preferences.getInt("shuffle_action", 0);
 		hourly_kanmusu = preferences.getString("hourly_kanmusu", "");
+		viewer_kanmusu = preferences.getString("viewer_kanmusu", "");
 		
 		Set<String> full = new HashSet<String>();
 		full = preferences.getStringSet("full_list", null);
@@ -100,6 +102,7 @@ public class SettingsAdapter {
 		editor.putInt("use_shuffle", use_shuffle);
 		editor.putInt("shuffle_action", shuffle_action);
 		editor.putString("hourly_kanmusu", hourly_kanmusu);
+		editor.putString("viewer_kanmusu", viewer_kanmusu);
 		
 		Set<String> full_set = new HashSet<String>();
 		full_set.addAll(full_list);
@@ -155,7 +158,7 @@ public class SettingsAdapter {
 		String[] projection = {MediaStore.Audio.AudioColumns._ID, MediaStore.Audio.AudioColumns.TITLE};
 		ContentResolver mCr = context.getContentResolver();
 		
-		// Due to changes in Android 4.3+ the data colum in the MediaStore must be unique so the data cannot be inserted just to get a
+		// Due to changes in Android 4.3+ the data column in the MediaStore must be unique so the data cannot be inserted just to get a
 		// Uri generated like most examples show, thus we now search the MediaStore for the file first and update the title if it doesnt
 		// include the shipgirls name, which it wont if the clip was added to the MediaStore automatically
 		Cursor cursor = mCr.query(uri, projection, MediaStore.Audio.AudioColumns.DATA + " LIKE ?", new String[] { filepath }, null);
@@ -194,8 +197,10 @@ public class SettingsAdapter {
 				rand = r.nextInt(max);
 			}
 			kanmusu =  kanmusu_use.get(rand);
-		} else {
+		} else if (shuffle_action == 2) {
 			kanmusu = hourly_kanmusu;
+		} else {
+			kanmusu = viewer_kanmusu;
 		}
 		
 		//	Getting time notifications for emails/sms could be confusing so we keep it to the 1-29 clips
