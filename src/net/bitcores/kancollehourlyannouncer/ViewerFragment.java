@@ -126,16 +126,7 @@ public class ViewerFragment extends Fragment {
 		
 		currentImg = 2;
 		imageList.clear();
-		playerTable.removeAllViews();
-		
-		
-		// Luckily seeing the sound clips are all named in numbers and the numbers corespond to their use usage I can just make this huge list of
-		// names, generate the list based of file names and then deduce the file name from the id of the item in the list when pressed
-		// Images are done similarly
-		String[] kArray = new String[] { "Introduction", "Secretary 1", "Secretary 2", "Secretary 3", "Ship Construction", "Finish Repair", "Return from Sortie", "Show player's score", "Equipment 1", "Equipment 2",
-		"Docking", "Docking (heavy damage)", "Joining Fleet", "Start Sortie", "Battle Start", "Attack", "Air/Night Attack", "Night Battle", "Under fire 1", "Under fire 2", "Badly Damaged", "Sunk", "MVP", 
-		"Confession", "Library Intro", "Equipment 3", "Supply", "Secretary Wife", "Idle", "00:00", "01:00", "02:00", "03:00", "04:00", "05:00", "06:00", "07:00", "08:00", "09:00", "10:00", "11:00", "12:00", 
-		"13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00", "23:00" };
+		playerTable.removeAllViews();	
 				
 		String[] iArray = new String[30];
 			
@@ -148,7 +139,7 @@ public class ViewerFragment extends Fragment {
 	        	for(int i = 1; i <= 53; i++) {
 	        		File testFile = new File(currentDir + "/" + i + ".mp3");
 	        		if (testFile.exists()) {
-	        			String clipName = kArray[i-1];
+	        			String clipName = SettingsAdapter.kArray[i-1];
     	            	TableRow row = new TableRow(context);
     	            	TextView kanmusu = new TextView(context);    	            	
     	            	kanmusu.setText(clipName);
@@ -169,9 +160,11 @@ public class ViewerFragment extends Fragment {
 	        	// Because the number and numbering of image files is not entirely consistent we have to actually build an array of them
 	        	for (File file : dirImage.listFiles()) {
 	        		String imgname = file.getName();
-	        		String[] parts = imgname.split(" ");
-	        		String[] parts2 = parts[1].split("\\.");
-	        		iArray[Integer.parseInt(parts2[0])] = imgname;
+	        		if (imgname.contains("image") && (imgname.contains(".jpg") || imgname.contains(".png"))) {
+	        			String[] parts = imgname.split(" ");
+		        		String[] parts2 = parts[1].split("\\.");
+		        		iArray[Integer.parseInt(parts2[0])] = imgname;
+	        		}
     	        }
 	        	
 	        	for (String img : iArray) {

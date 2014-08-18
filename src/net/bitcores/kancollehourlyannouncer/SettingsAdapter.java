@@ -41,7 +41,16 @@ public class SettingsAdapter {
 	public static List<String> kanmusu_list = new ArrayList<String>();
 	public static List<String> kanmusu_select = new ArrayList<String>();
 	public static List<String> kanmusu_use = new ArrayList<String>();
-	
+	public static List<String> kanmusu_shufflelist = new ArrayList<String>();	
+
+	// Luckily seeing the sound clips are all named in numbers and the numbers corespond to their use usage I can just make this huge list of
+	// names, generate the list based of file names and then deduce the file name from the id of the item in the list when pressed
+	// Images are done similarly
+	// I want to use this same list in the settings fragment for the shuffle list selection so it can be here instead
+	public static String[] kArray = new String[] { "Introduction", "Secretary 1", "Secretary 2", "Secretary 3", "Ship Construction", "Finish Repair", "Return from Sortie", "Show player's score", "Equipment 1", "Equipment 2",
+		"Docking", "Docking (heavy damage)", "Joining Fleet", "Start Sortie", "Battle Start", "Attack", "Air/Night Attack", "Night Battle", "Under fire 1", "Under fire 2", "Badly Damaged", "Sunk", "MVP", 
+		"Confession", "Library Intro", "Equipment 3", "Supply", "Secretary Wife", "Idle", "00:00", "01:00", "02:00", "03:00", "04:00", "05:00", "06:00", "07:00", "08:00", "09:00", "10:00", "11:00", "12:00", 
+		"13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00", "23:00" };
 
 	public SettingsAdapter() {
 		
@@ -83,6 +92,15 @@ public class SettingsAdapter {
 			kanmusu_list.addAll(list);
 			sortList(kanmusu_list);
 		}
+		Set<String> shufflelist = new HashSet<String>();
+		shufflelist = preferences.getStringSet("kanmusu_shufflelist", null);
+		if (shufflelist != null) {
+			kanmusu_shufflelist.addAll(shufflelist);			
+		} else {
+			for (Integer s = 0; s < 29; s++) {
+				kanmusu_shufflelist.add(s.toString());
+			}
+		}
 		
 		init = true;
 	}
@@ -115,6 +133,10 @@ public class SettingsAdapter {
 		Set<String> use_set = new HashSet<String>();
 		use_set.addAll(kanmusu_use);
 		editor.putStringSet("kanmusu_use", use_set);
+		
+		Set<String> shufflelist_set = new HashSet<String>();
+		shufflelist_set.addAll(kanmusu_shufflelist);
+		editor.putStringSet("kanmusu_shufflelist", shufflelist_set);
 			
 		editor.commit();
 		
@@ -174,6 +196,7 @@ public class SettingsAdapter {
 			values.put(MediaStore.MediaColumns.MIME_TYPE, "audio/mp3");
 			ringtoneUri = mCr.insert(uri, values);
 		}
+		cursor.close();
 		
 		RingtoneManager.setActualDefaultRingtoneUri(context, RingtoneManager.TYPE_NOTIFICATION, ringtoneUri);
 	}
@@ -181,6 +204,7 @@ public class SettingsAdapter {
 	public void shuffleRingtone(Context context) {
 		int rand = 0;
 		int rand2 = 0;
+		int listsize = kanmusu_shufflelist.size();
 		String kanmusu = "";
 		
 		if (shuffle_action == 0) {
@@ -203,17 +227,25 @@ public class SettingsAdapter {
 			kanmusu = viewer_kanmusu;
 		}
 		
-		//	Getting time notifications for emails/sms could be confusing so we keep it to the 1-29 clips
-		Random r2 = new Random();
-		rand2 = r2.nextInt(29) + 1;		
+		//	We are now using kanmusu_shufflelist to determine selection of clips that are chosen from, these are still within the 1-29 set
+		//	Because a kanmusu may not have one of the selected clips we will allow the randomization to loop up to three times to fine one
+		for (int c = 0; c < 3; c++) {
+			if (listsize > 0) {
+				if (listsize > 1) {
+					Random r2 = new Random();
+					rand2 = r2.nextInt(listsize);
+				}
+				Integer clip = Integer.parseInt(kanmusu_shufflelist.get(rand2)) + 1;			
+				String filepath = kancolle_dir + "/" + kanmusu + "/" + clip + ".mp3";
 				
-		String filepath = kancolle_dir + "/" + kanmusu + "/" + rand2 + ".mp3";
-		File checkfile = new File(filepath);
-		
-		if (checkfile.exists()) {
-			Log.i("kancolle announcer", "Ringtone Set: " + filepath);
-			
-			setRingtone(context, filepath, kanmusu, rand2);
+				File checkfile = new File(filepath);		
+				if (checkfile.exists()) {
+					Log.i("kancolle announcer", "Ringtone Set: " + filepath);				
+					setRingtone(context, filepath, kanmusu, rand2);
+					
+					break;
+				}
+			}
 		}
 	}
 	

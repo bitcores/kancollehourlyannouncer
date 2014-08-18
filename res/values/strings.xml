@@ -44,7 +44,7 @@
     <string name="endtimesub">Quiet Hours Volume will not be used on this hour</string>
     <string name="startpicktitle">Select Start Hour</string>
     <string name="endpicktitle">Select End Hour</string>
-    <string name="columnspicktitle">Select number of columns</string>
-    <string name="rowspicktitle">Select number of rows</string>
+	<string name="shuffleclipselectiontext">Select shuffle list</string>
+    
 
 </resources>

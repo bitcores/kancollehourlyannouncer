@@ -176,6 +176,15 @@
 		         android:layout_below="@+id/shuffleSpinner"
 		         android:layout_marginTop="5dp"
 		         android:saveEnabled="false" />
+		     
+		     <Button
+		         android:id="@+id/shuffleClipSelection"
+		         style="@style/button"
+		         android:layout_width="wrap_content"
+		         android:layout_alignLeft="@+id/shuffleViewerText"
+		         android:layout_below="@+id/shuffleViewerText"
+		         android:layout_marginTop="10dp"
+		         android:text="@string/shuffleclipselectiontext" />
 	    
 		</RelativeLayout>
     

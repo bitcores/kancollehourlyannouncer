@@ -56,8 +56,6 @@ public class ServiceTask extends Service {
 				int end = SettingsAdapter.quiet_end;			
 				int quiet = 0;
 				int rand = 0;
-				boolean checkLine = false;
-				int checkBreak = 0;
 				
 				// Getting phone call state
 				TelephonyManager tm = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
@@ -87,8 +85,7 @@ public class ServiceTask extends Service {
 						}
 					}
 					
-					while (!checkLine)
-					{
+					for (int c = 0; c < 4; c++) {
 						if (SettingsAdapter.kanmusu_use.size() > 1) {
 							int max = SettingsAdapter.kanmusu_use.size();
 							Random r = new Random();
@@ -99,7 +96,6 @@ public class ServiceTask extends Service {
 						// Check the file exists
 						File checkfile = new File(filepath);
 						if (checkfile.exists()) {
-							checkLine = true;
 							SettingsAdapter.hourly_kanmusu = SettingsAdapter.kanmusu_use.get(rand);
 							
 							try {
@@ -132,19 +128,16 @@ public class ServiceTask extends Service {
 								mp.prepare();
 								
 								Log.i("kancolle announcer", "ServiceTask Playing file: " + filepath);
-								mp.start();						
+								mp.start();
+								
+								// Break out of the loop once a kanmusu with timeclip is found
+								break;
 							} catch (Exception e) {
 								Log.e("kancolle announcer", "ServiceTask Error playing file: " + filepath);
 							}
 						} else {
 							// If kanmusu doesn't have the time clip then remove it from the use list
 							SettingsAdapter.kanmusu_use.remove(rand);
-							
-							// Break out of the loop checking for files if more than four failures
-							checkBreak++;
-							if (checkBreak > 4) {
-								break;
-							}
 						}				
 					}
 				}

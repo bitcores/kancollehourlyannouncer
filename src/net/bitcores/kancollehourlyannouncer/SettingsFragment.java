@@ -1,5 +1,8 @@
 package net.bitcores.kancollehourlyannouncer;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -12,14 +15,12 @@ import android.media.MediaPlayer.OnCompletionListener;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
@@ -39,8 +40,10 @@ public class SettingsFragment extends Fragment {
 	private static CheckBox useQuietBox;	
 	private static TextView startTime;
 	private static TextView endTime;
+	private static Button shuffleClipSelection;
 	private static SeekBar quietVolumeBar;
-	
+	private static List<String> local_kanmusu_shufflelist = new ArrayList<String>();
+		
 	public static Spinner shuffleSpinner;
 	public static CheckBox useShuffleBox;
 	public static TextView shuffleViewerText;
@@ -55,6 +58,9 @@ public class SettingsFragment extends Fragment {
 		settingsAdapter = new SettingsAdapter();
 		preferences = context.getSharedPreferences(SettingsAdapter.PREF_FILE_NAME, Context.MODE_PRIVATE);
 		
+		local_kanmusu_shufflelist.clear();
+		local_kanmusu_shufflelist.addAll(SettingsAdapter.kanmusu_shufflelist);
+		
 		mediaSpinner = (Spinner)rootView.findViewById(R.id.mediaSpinner);
 		callSpinner = (Spinner)rootView.findViewById(R.id.callSpinner);
 		shuffleSpinner = (Spinner)rootView.findViewById(R.id.shuffleSpinner);
@@ -63,6 +69,7 @@ public class SettingsFragment extends Fragment {
 		startTime = (TextView)rootView.findViewById(R.id.quietHoursStart);	
 		endTime = (TextView)rootView.findViewById(R.id.quietHoursEnd);
 		shuffleViewerText = (TextView)rootView.findViewById(R.id.shuffleViewerText);
+		shuffleClipSelection = (Button)rootView.findViewById(R.id.shuffleClipSelection);
 		
 		mediaSpinner.setSelection(SettingsAdapter.use_volume);
 		callSpinner.setSelection(SettingsAdapter.call_action);
@@ -81,6 +88,13 @@ public class SettingsFragment extends Fragment {
 		
 		LinearLayout endTimeLayout = (LinearLayout)rootView.findViewById(R.id.endTimeLayout);
 		endTimeLayout.setOnTouchListener(pickerTouchListener);
+		
+		shuffleClipSelection.setOnClickListener(new OnClickListener(){
+			@Override
+			public void onClick(View view) {
+				shuffleListDialog();
+			}			
+		});
 		
 		quietVolumeBar = (SeekBar)rootView.findViewById(R.id.quietHoursVolume);	
 		quietVolumeBar.setMax(100);
@@ -155,13 +169,8 @@ public class SettingsFragment extends Fragment {
 	public void numberPickerDialog() {
 		AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
 		
-		LinearLayout titleLayout = new LinearLayout(context);
-	    titleLayout.setOrientation(LinearLayout.VERTICAL);
-	    TextView titleView = new TextView(context);
-	    titleView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
-	    titleView.setTextAppearance(context, android.R.style.TextAppearance_Large);
-	    titleView.setTextColor(context.getResources().getColor(android.R.color.black));
-	    titleView.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL);    
+		View dialogTitle = LayoutInflater.from(context).inflate(R.layout.dialog_title, (ViewGroup)context.findViewById(R.id.dialogLayout), false);
+	    TextView titleView = (TextView)dialogTitle.findViewById(R.id.dialogTitleText);
 	    
 	    View dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_numberpicker, (ViewGroup)context.findViewById(R.id.dialogImageLayout), false);
 		final NumberPicker numberPicker = (NumberPicker)dialogView.findViewById(R.id.numberPicker);
@@ -183,9 +192,8 @@ public class SettingsFragment extends Fragment {
 				subText.setText(getResources().getString(R.string.endtimesub));
 			}
 		} 
-				
-		titleLayout.addView(titleView);    
-	    dialogBuilder.setCustomTitle(titleLayout);
+				   
+	    dialogBuilder.setCustomTitle(dialogTitle);
 	    dialogBuilder.setView(dialogView);
 	    
 	    dialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() 
@@ -206,6 +214,51 @@ public class SettingsFragment extends Fragment {
 		AlertDialog numberPickerDialog = dialogBuilder.create();
 		
 		numberPickerDialog.show();
+	}
+	
+	public void shuffleListDialog() {
+		AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
+	    
+	    View dialogTitle = LayoutInflater.from(context).inflate(R.layout.dialog_title, (ViewGroup)context.findViewById(R.id.dialogLayout), false);
+	    TextView titleView = (TextView)dialogTitle.findViewById(R.id.dialogTitleText);	    
+	    titleView.setText(getResources().getString(R.string.shuffleclipselectiontext));	        
+	    dialogBuilder.setCustomTitle(dialogTitle);
+	    
+	    final String[] itemsArray = new String[29];
+	    final boolean[] selectedItems = new boolean[29];
+	    for (Integer c = 0; c < 29; c++) {
+	    	if (local_kanmusu_shufflelist.contains(c.toString())) {
+	    		selectedItems[c] = true;
+	    	} else {
+	    		selectedItems[c] = false;
+	    	}
+	    	itemsArray[c] = SettingsAdapter.kArray[c];
+	    }
+    
+	    dialogBuilder.setMultiChoiceItems(itemsArray, selectedItems, new DialogInterface.OnMultiChoiceClickListener() {			
+			@Override
+			public void onClick(DialogInterface dialog, int button, boolean bool) {
+				// do nothing				
+			}
+		});
+	    
+	    dialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() 
+	    {
+	        @Override
+	        public void onClick(DialogInterface dialog, int button) 
+	        {
+	        	local_kanmusu_shufflelist.clear();
+	        	for (Integer i = 0; i < selectedItems.length; i++) {
+	        		if (selectedItems[i]) {
+	        			local_kanmusu_shufflelist.add(i.toString());
+	        		}
+	        	}        	
+	        }
+	    }).setNegativeButton("Cancel", null);
+	    
+	    AlertDialog shuffleListDialog = dialogBuilder.create();
+		
+		shuffleListDialog.show();
 	}
 	
 	OnTouchListener pickerTouchListener = new OnTouchListener() {
@@ -253,6 +306,9 @@ public class SettingsFragment extends Fragment {
 			shuffleViewerText.setText(context.getResources().getString(R.string.viewerkantext) + " " + SettingsAdapter.viewer_kanmusu);
 		}
 		
+		SettingsAdapter.kanmusu_shufflelist.clear();
+		SettingsAdapter.kanmusu_shufflelist.addAll(local_kanmusu_shufflelist);
+		
 		if (useQuietBox.isChecked()) {
 			SettingsAdapter.use_quiet = 1;
 		} else {
@@ -261,6 +317,8 @@ public class SettingsFragment extends Fragment {
 		
 		if (useShuffleBox.isChecked()) {
 			SettingsAdapter.use_shuffle = 1;
+			//	We want to shuffle the ringtone here so that any changes to the shufflelist get applied
+			settingsAdapter.shuffleRingtone(context);
 		} else {
 			SettingsAdapter.use_shuffle = 0;
 		}
@@ -268,7 +326,7 @@ public class SettingsFragment extends Fragment {
 		SettingsAdapter.quiet_start = Integer.parseInt(startTime.getText().toString().split(":")[0]);
 		SettingsAdapter.quiet_end = Integer.parseInt(endTime.getText().toString().split(":")[0]);
 		SettingsAdapter.quiet_volume = quietVolumeBar.getProgress();
-		
+				
 		settingsAdapter.saveSettings(context, 1);
 	}
 	
