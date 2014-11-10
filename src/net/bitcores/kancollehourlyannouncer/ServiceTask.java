@@ -1,5 +1,5 @@
 package net.bitcores.kancollehourlyannouncer;
-
+/*
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.Calendar;
@@ -18,12 +18,12 @@ import android.telephony.TelephonyManager;
 import android.util.Log;
 
 public class ServiceTask extends Service {
-	AlarmAdapter alarmAdapter;
-	SettingsAdapter settingsAdapter;
-	PowerManager pm;
-	WakeLock wl;
+	private AlarmAdapter alarmAdapter;
+	private SettingsAdapter settingsAdapter;
+	private PowerManager pm;
+	private WakeLock wl;
 	
-	private static MediaPlayer mp;
+	//private static MediaPlayer mp;
 		
 	@Override
 	public IBinder onBind(Intent intent) {
@@ -98,6 +98,12 @@ public class ServiceTask extends Service {
 						if (checkfile.exists()) {
 							SettingsAdapter.hourly_kanmusu = SettingsAdapter.kanmusu_use.get(rand);
 							
+							Intent intent = new Intent(ServiceTask.this, AudioService.class);
+							intent.putExtra("TYPE", "announce");
+							intent.putExtra("FILE", filepath);
+							intent.putExtra("INTERRUPT", 0);
+							startService(intent);
+							
 							try {
 								// Set up mediaplayer
 								mp = new MediaPlayer();
@@ -166,4 +172,4 @@ public class ServiceTask extends Service {
 	public void onDestroy() {
 		super.onDestroy();
 	}
-}
+}*/

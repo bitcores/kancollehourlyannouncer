@@ -59,7 +59,7 @@ public class WidgetShare {
 		}
 		
 		//	CREATE CLOCK TOUCH INTENT
-		Intent clockIntent = new Intent(context, PagerActivity.class);
+		Intent clockIntent = new Intent(context, MainActivity.class);
 		PendingIntent pclockIntent = PendingIntent.getActivity(context, 49494, clockIntent, 0);
 			
 		
@@ -114,8 +114,8 @@ public class WidgetShare {
 								widgetView = new RemoteViews(context.getPackageName(), R.layout.widget_clockresizablel);
 								
 								Bitmap scaled = Bitmap.createScaledBitmap(bitmap, 1099, 200, true);
-								
 								cropped = Bitmap.createBitmap(scaled, 0, 0, width, 200);
+								scaled.recycle();
 							}	
 						}						
 						

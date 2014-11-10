@@ -3,6 +3,36 @@
     android:layout_height="match_parent"
     android:padding="10dp" >
     
+    <RelativeLayout
+        android:id="@+id/kanmusuBgLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="10dp" >
+        
+	    <ImageView
+	        android:id="@+id/kanmusuBgImage"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"       
+	        android:layout_marginBottom="10dp"
+	        android:layout_above="@+id/kanmusuBgText"
+	        android:maxWidth="400dp"        
+	        android:adjustViewBounds="true"
+	        android:scaleType="centerInside"
+	        android:contentDescription="@string/bgdesc" />
+	    
+	    <TextView
+	        android:id="@+id/kanmusuBgText"
+	        style="@style/medtext"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_marginBottom="5dp"
+	        android:layout_alignParentBottom="true"
+	        android:layout_centerInParent="true" />
+    
+   	</RelativeLayout>
+    
     <LinearLayout 
         android:id="@+id/dirSelect"
         android:layout_width="wrap_content"
@@ -14,72 +44,175 @@
         
 	    <TextView
 	        android:id="@+id/dirTitle"
+	        style="@style/titletext"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
-	        android:text="@string/dirtitle"
-	        style="@style/titletext" />
+	        android:text="@string/dirtitle" />
 	    
 	    <TextView
 	        android:id="@+id/dirText"
+	        style="@style/medtext"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
-	        android:layout_marginLeft="5dp"
-	        style="@style/medtext" />
+	        android:layout_marginLeft="5dp" />
 	    
     </LinearLayout>
-        
+    
+    <TextView
+        android:id="@+id/foundTextTitle"
+        style="@style/medtext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/dirSelect"
+        android:layout_below="@+id/dirSelect"
+        android:layout_marginTop="5dp"
+        android:text="@string/numfoundtitle" />
+    
+    <TextView
+        android:id="@+id/foundText"
+        style="@style/medtext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/foundTextTitle"
+        android:layout_toRightOf="@+id/foundTextTitle"
+        android:layout_marginLeft="5dp" />
+    
+    <TextView
+        android:id="@+id/useTextTitle"
+        style="@style/medtext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/dirSelect"
+        android:layout_below="@+id/foundText"
+        android:layout_marginTop="5dp"
+        android:text="@string/numusetitle" />
+    
+    <TextView
+        android:id="@+id/useText"
+        style="@style/medtext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/useTextTitle"
+        android:layout_toRightOf="@+id/useTextTitle"
+        android:layout_marginLeft="5dp" />
+    
     <Button
         android:id="@+id/scanButton"
         style="@style/button"
         android:layout_width="wrap_content"
-        android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
+        android:layout_alignBottom="@+id/dirSelect"
         android:text="@string/scandir" />
+    
+    <Button
+        android:id="@+id/pickButton"
+        style="@style/button"
+        android:layout_width="wrap_content"
+        android:layout_alignBottom="@id/useTextTitle"
+        android:layout_alignParentRight="true"
+        android:text="@string/pickkanmusu" />
     
     <CheckBox
         android:id="@+id/selectAllBox"
+        style="@style/medtext"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/dirSelect"
-        android:layout_marginTop="5dp"
+        android:layout_below="@+id/pickButton"
+        android:layout_alignRight="@+id/pickButton"
+        android:layout_marginTop="10dp"
         android:text="@string/selectall" />
     
-    <ScrollView
-        android:id="@+id/kanmusuScroll"
+    <LinearLayout
+        android:id="@+id/enableLayout"
         android:layout_width="wrap_content"
-        android:layout_height="fill_parent"
-        android:layout_above="@+id/saveButton"
-        android:layout_below="@+id/selectAllBox"
-        android:fadeScrollbars="false"
-        android:verticalScrollbarPosition="left" >
-        
-	    <TableLayout
-	        android:id="@+id/kanmusuTable"
-	        android:layout_width="match_parent"
-	        android:layout_height="wrap_content"
-	        android:layout_marginLeft="5dp" >       
-	    </TableLayout>
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/useTextTitle"
+	    android:layout_below="@+id/useTextTitle"
+	    android:layout_marginTop="5dp"
+        >
+	    <TextView
+	        android:id="@+id/enableText"
+	        style="@style/medtext"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"      
+	        android:text="@string/enabletexttitle" />
 	    
-    </ScrollView>
-	
-    <Button
-        android:id="@+id/enableButton"
-        style="@style/button"
+	    <TextView
+	        android:id="@+id/announceStatus"
+	        style="@style/medtext"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_marginLeft="5dp" />  
+	    	
+	    <Button
+	        android:id="@+id/enableButton"
+	        style="@style/button"
+	        android:layout_width="wrap_content"
+	        android:layout_marginLeft="10dp"
+	        android:textAllCaps="true" />
+    </LinearLayout>
+    
+    <TextView
+        android:id="@+id/shuffleSettingsTitle"
+        style="@style/titletext"
         android:layout_width="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_marginLeft="30dp"
-        android:layout_marginTop="5dp" />
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/enableLayout"
+        android:layout_below="@+id/enableLayout"
+        android:layout_marginTop="40dp"
+        android:text="@string/shufflesettingstitle" />
+         
+    <CheckBox
+	    android:id="@+id/shuffleBox"
+	    style="@style/medtext"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignLeft="@+id/shuffleSettingsTitle"
+	    android:layout_below="@+id/shuffleSettingsTitle"
+	    android:layout_marginTop="10dp"
+	    android:text="@string/useshuffle"
+	    android:saveEnabled="false" />
     
     <Button
-        android:id="@+id/saveButton"
-        style="@style/button"
-        android:layout_width="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="30dp"
-        android:layout_marginTop="5dp"
-        android:text="@string/savekanmusu" />
-
+	    android:id="@+id/shuffleClipSelection"
+	    style="@style/button"
+	    android:layout_width="wrap_content"
+	    android:layout_below="@+id/shuffleBox"
+	    android:layout_alignLeft="@+id/shuffleBox"
+	    android:layout_marginTop="5dp"
+	    android:layout_marginLeft="5dp"
+	    android:text="@string/shuffleclipselectiontext" />
+	
+	<Spinner
+	    android:id="@+id/shuffleSpinner"
+	    android:layout_width="220dp"
+	    android:layout_height="wrap_content"
+	    android:layout_alignLeft="@+id/shuffleClipSelection"
+	    android:layout_below="@+id/shuffleClipSelection"
+	    android:layout_marginTop="5dp"
+	    android:prompt="@string/shufflespinner"
+	    android:entries="@array/shuffleaction"
+	    android:spinnerMode="dialog"
+	    android:saveEnabled="false" />
+	
+	<TextView
+	    android:id="@+id/shuffleViewerTitle"
+	    style="@style/medtext"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignLeft="@+id/shuffleSpinner"
+	    android:layout_below="@+id/shuffleSpinner"
+	    android:layout_marginTop="5dp"
+	    android:text="@string/viewerkantext" />
+	
+	<TextView
+	    android:id="@+id/shuffleViewerText"
+	    style="@style/medtext"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignBottom="@+id/shuffleViewerTitle"
+	    android:layout_toRightOf="@+id/shuffleViewerTitle"
+	    android:layout_marginLeft="5dp"	    
+	    android:saveEnabled="false" />
+		
 </RelativeLayout>

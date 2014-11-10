@@ -30,7 +30,10 @@ public class AlarmAdapter {
 		
 		Log.i("kancolle announcer", "Alarm set for: " + f.format(cal.getTimeInMillis()));
 		
-		Intent intent = new Intent(context, ServiceTask.class);
+		Intent intent = new Intent(context, AudioService.class);
+		intent.putExtra("TYPE", "announce");
+		intent.putExtra("FILE", "none");
+		intent.putExtra("INTERRUPT", 9);
 		pendingIntent = PendingIntent.getService(context, 55559, intent, PendingIntent.FLAG_CANCEL_CURRENT);
 		AlarmManager alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
 		//	Kitkat uses inexact alarms unless setExact is used
@@ -42,7 +45,7 @@ public class AlarmAdapter {
 	}
 	
 	public void stopAlarm(Context context) {
-		Intent intent = new Intent(context, ServiceTask.class);
+		Intent intent = new Intent(context, AudioService.class);
 		pendingIntent = PendingIntent.getService(context, 55559, intent, PendingIntent.FLAG_CANCEL_CURRENT);
 		AlarmManager alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
 		alarmManager.cancel(pendingIntent);

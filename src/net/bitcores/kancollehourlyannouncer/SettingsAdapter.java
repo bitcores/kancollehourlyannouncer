@@ -14,14 +14,18 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class SettingsAdapter {
-	SharedPreferences preferences;
+	private SharedPreferences preferences;
 	
 	public static final String PREF_FILE_NAME = "settings";
 	public static Boolean init = false;
@@ -41,8 +45,8 @@ public class SettingsAdapter {
 	public static List<String> kanmusu_list = new ArrayList<String>();
 	public static List<String> kanmusu_select = new ArrayList<String>();
 	public static List<String> kanmusu_use = new ArrayList<String>();
-	public static List<String> kanmusu_shufflelist = new ArrayList<String>();	
-
+	public static List<String> kanmusu_shufflelist = new ArrayList<String>();
+	
 	// Luckily seeing the sound clips are all named in numbers and the numbers corespond to their use usage I can just make this huge list of
 	// names, generate the list based of file names and then deduce the file name from the id of the item in the list when pressed
 	// Images are done similarly
@@ -246,6 +250,35 @@ public class SettingsAdapter {
 					break;
 				}
 			}
+		}
+	}
+	
+	public void doBackground(ImageView bgImage, TextView bgText) {
+
+		if (SettingsAdapter.kanmusu_use.size() > 0) {
+			String kanmusu = getKanmusu();		
+
+			// The Arpeggio event characters didn't include an image 17.png but instead had a 16 and 18 that were usually combined to fill the place of 17
+			// we use 16 if 17 isn't present
+
+			boolean exist = false;
+			String filepath = SettingsAdapter.kancolle_dir + "/" + kanmusu + "/Image/image 17.png";
+			File checkfile = new File(filepath);
+			if (checkfile.exists()) {
+				exist = true;
+			} else {
+				filepath = SettingsAdapter.kancolle_dir + "/" + kanmusu + "/Image/image 16.png";
+				checkfile = new File(filepath);				
+				if (checkfile.exists()) {
+					exist = true;
+				}
+			}
+			
+			if (exist) {
+				Bitmap bitmap = BitmapFactory.decodeFile(filepath);
+				bgImage.setImageBitmap(bitmap);
+				bgText.setText(kanmusu);
+			}			
 		}
 	}
 	

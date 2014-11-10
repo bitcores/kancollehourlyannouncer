@@ -1,6 +1,6 @@
 package net.bitcores.kancollehourlyannouncer;
 
-import java.io.File;
+/*import java.io.File;
 
 import android.os.Bundle;
 import android.app.ActionBar.Tab;
@@ -139,4 +139,4 @@ public class PagerActivity extends FragmentActivity implements ActionBar.TabList
 	
 	
 
-}
+}*/

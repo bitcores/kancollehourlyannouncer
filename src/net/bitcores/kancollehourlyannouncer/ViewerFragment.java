@@ -14,8 +14,11 @@ import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.app.Fragment;
+import android.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
@@ -25,36 +28,41 @@ import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
-import android.widget.TableLayout;
-import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemSelectedListener;
 
 public class ViewerFragment extends Fragment {
-	AlarmAdapter alarmAdapter;
-	SettingsAdapter settingsAdapter;
-	LayoutInflater viewerInflater;
+	private static SettingsAdapter settingsAdapter;
 
 	private static Activity context;		
 	private static View rootView;
 	private static TextView msgBox;
-	private static TableLayout playerTable;
+	private static Spinner playerSpinner;
+	private static Spinner kanmusuSpinner;
 	private static ImageView playerImage;
-	private static String currentDir;
+	private static ImageView leftImage;
+	private static ImageView rightImage;
+	private static Button playButton;
+	private static Button stopButton;
 	
-	public static String currentKanmusu;
+	private static String currentKanmusu;
+	private static String currentDir;
+	private static Integer currentId;
+	private static Integer currentView;
+	private static Integer currentImg;
+	
 	public static ProgressBar pb;
-	public static Spinner kanmusuSpinner;
-	public Integer currentView;
-	public Integer currentImg;
 	
 	private final Handler handler = new Handler();
 	List<String> imageList = new ArrayList<String>();
+	List<String> clipList= new ArrayList<String>();
+	List<Integer> nameList = new ArrayList<Integer>();
 	
 	public ViewerFragment() {
 		
@@ -62,24 +70,24 @@ public class ViewerFragment extends Fragment {
 		
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		setHasOptionsMenu(true);
 		rootView = inflater.inflate(R.layout.fragment_viewer, container, false);
 
 		context = getActivity();	
-		alarmAdapter = new AlarmAdapter();
 		settingsAdapter = new SettingsAdapter();
 		
 		pb = (ProgressBar)rootView.findViewById(R.id.playprogress);
 		kanmusuSpinner = (Spinner)rootView.findViewById(R.id.kanmususpinner);
+		playerSpinner = (Spinner)rootView.findViewById(R.id.playerspinner);
 		msgBox = (TextView)rootView.findViewById(R.id.msgbox);
-		playerTable = (TableLayout)rootView.findViewById(R.id.playertable);
 		playerImage = (ImageView)rootView.findViewById(R.id.viewerimage);
+		leftImage = (ImageView)rootView.findViewById(R.id.leftimage);
+		rightImage = (ImageView)rootView.findViewById(R.id.rightimage);
+		playButton = (Button)rootView.findViewById(R.id.playbutton);
+		stopButton = (Button)rootView.findViewById(R.id.stopbutton);
 		
-		playerImage.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				changeImage();
-			}			
-		});
+		leftImage.setOnClickListener(imageChangeListener);
+		rightImage.setOnClickListener(imageChangeListener);
 		playerImage.setOnLongClickListener(imgLongClickListener);
 		
 		kanmusuSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
@@ -91,6 +99,28 @@ public class ViewerFragment extends Fragment {
 			@Override
 			public void onNothingSelected(AdapterView<?> parent) {			
 			}
+		});	
+		playerSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+				currentId = position;
+			}
+			@Override
+			public void onNothingSelected(AdapterView<?> parent) {
+			}			
+		});
+		
+		playButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				playClip(nameList.get(currentId));
+			}		
+		});	
+		stopButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				stopClip();
+			}		
 		});
 		
 		setupPage();	
@@ -98,15 +128,58 @@ public class ViewerFragment extends Fragment {
 		return rootView;
 	}
 	
-	public void setupPage() {
+	@Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {	
+		super.onCreateOptionsMenu(menu, inflater);
+	    inflater.inflate(R.menu.viewerfragment_actions, menu);    
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+	    switch (item.getItemId()) {
+	    case R.id.action_setringtone:
+	    	String filepath = currentDir + "/" + currentId + ".mp3";						
+			settingsAdapter.setRingtone(context, filepath, currentKanmusu, currentId);
+
+			if (SettingsAdapter.use_shuffle == 1) {
+				SettingsAdapter.use_shuffle = 0;
+				settingsAdapter.saveSettings(context, 0);						
+				Toast.makeText(context, context.getResources().getString(R.string.rtoneunset), Toast.LENGTH_SHORT).show();
+			} else {
+				Toast.makeText(context, context.getResources().getString(R.string.rtoneset), Toast.LENGTH_SHORT).show();
+			}
+	        return true;
+	    case R.id.action_setkanmusugroup:
+	        if (SettingsAdapter.use_shuffle == 0) {
+				SettingsAdapter.use_shuffle = 1;							
+				Toast.makeText(context, context.getResources().getString(R.string.rtoneshufenset), Toast.LENGTH_SHORT).show();
+			} else {
+				Toast.makeText(context, context.getResources().getString(R.string.rtoneshufset), Toast.LENGTH_SHORT).show();
+			}
+			
+			SettingsAdapter.viewer_kanmusu = currentKanmusu;
+			SettingsAdapter.shuffle_action = 3;
+			settingsAdapter.saveSettings(context, 0);											
+			settingsAdapter.shuffleRingtone(context);
+	        return true;
+	    default:
+	        break;
+	    }
+
+	    return false;
+	}
+	
+	private void setupPage() {
 		ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, SettingsAdapter.full_list);
 		kanmusuSpinner.setAdapter(spinnerAdapter);
 		if (SettingsAdapter.full_list.size() == 0) {
 			kanmusuSpinner.setEnabled(false);
 			imageList.clear();
-			playerTable.removeAllViews();
+			clipList.clear();
+			nameList.clear();
 			playerImage.setImageDrawable(null);
 			currentDir = null;
+			currentId = null;
 			if (SettingsAdapter.kanmusu_list.size() > 0) {
 				msgBox.setText(getResources().getString(R.string.viewererror1));
 			} else {			
@@ -117,18 +190,22 @@ public class ViewerFragment extends Fragment {
 			kanmusuSpinner.setSelection(SettingsAdapter.full_list.indexOf(SettingsAdapter.hourly_kanmusu));
 			msgBox.setText("");
 		}
+		
+		playButton.setEnabled(false);
+		stopButton.setEnabled(false);
 	}
 	
-	public void generateViewer() {
+	private void generateViewer() {
 		//generate sound clip list
 		currentKanmusu = SettingsAdapter.full_list.get(currentView);
 		currentDir = SettingsAdapter.kancolle_dir + "/" + currentKanmusu;
 		
 		currentImg = 2;
 		imageList.clear();
-		playerTable.removeAllViews();	
-				
-		String[] iArray = new String[30];
+		clipList.clear();
+		nameList.clear();
+						
+		String[] iArray = new String[30];	
 			
 	    try
 	    {
@@ -139,23 +216,12 @@ public class ViewerFragment extends Fragment {
 	        	for(int i = 1; i <= 53; i++) {
 	        		File testFile = new File(currentDir + "/" + i + ".mp3");
 	        		if (testFile.exists()) {
-	        			String clipName = SettingsAdapter.kArray[i-1];
-    	            	TableRow row = new TableRow(context);
-    	            	TextView kanmusu = new TextView(context);    	            	
-    	            	kanmusu.setText(clipName);
-    	            	kanmusu.setTextAppearance(context, R.style.hugetext);
-    	            	kanmusu.setPadding(2, 2, 2, 2);
-    	            	
-    	            	row.setId(i);
-    	            	row.addView(kanmusu);
-    	            	   	            	
-    	            	row.setOnTouchListener(rowTouchListener);
-    	            	row.setOnClickListener(rowClickListener); 	            	
-    	            	row.setOnLongClickListener(rowLongClickListener);
-    	            	
-    	            	playerTable.addView(row);
+	        			clipList.add(SettingsAdapter.kArray[i-1]);
+	        			nameList.add(i);
 	        		}
 	        	}
+	        	
+	        	playerSpinner.setAdapter(new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, clipList));
 	        	
 	        	// Because the number and numbering of image files is not entirely consistent we have to actually build an array of them
 	        	for (File file : dirImage.listFiles()) {
@@ -177,17 +243,13 @@ public class ViewerFragment extends Fragment {
 	    } catch (Exception e) {
 	    }
         
+	    playButton.setEnabled(true);
 	    if (imageList.size() > 0) {
-		    String filepath = currentDir + "/Image/" + imageList.get(currentImg);
-			File checkfile = new File(filepath);
-			if (checkfile.exists()) {
-				Bitmap bitmap = BitmapFactory.decodeFile(filepath);
-				playerImage.setImageBitmap(bitmap);
-			}
+	    	setImages();
 	    }
 	}
 	
-	public void playClip(Integer filename) {
+	private void playClip(Integer filename) {
 		String filepath = currentDir + "/" + filename + ".mp3";
 		File checkfile = new File(filepath);
 		if (checkfile.exists()) {
@@ -196,23 +258,57 @@ public class ViewerFragment extends Fragment {
 			intent.putExtra("FILE", filepath);
 			intent.putExtra("INTERRUPT", 0);
 			context.startService(intent);
+			
+			playButton.setEnabled(false);
+			stopButton.setEnabled(true);
 		}
 	}
 	
-	public void changeImage() {
-		if (currentDir != null && imageList.size() > 0) {
-			if (currentImg == imageList.size()-1) {
-				currentImg = 0;
-			} else {
-				currentImg++;
-			}
+	private void stopClip() {
+		Intent intent = new Intent(context, AudioService.class);
+		intent.putExtra("TYPE", "none");
+		intent.putExtra("FILE", "none");
+		intent.putExtra("INTERRUPT", 1);
+		context.startService(intent);
+		
+		playButton.setEnabled(true);
+		stopButton.setEnabled(false);
+	}
+		
+	private Integer checkImageLeft(Integer check) {
+		if (check == 0) {
+			check = imageList.size()-1;
+		} else {
+			check--;
+		}
+		
+		return check;
+	}
+	
+	private Integer checkImageRight(Integer check) {
+		if (check == imageList.size()-1) {
+			check = 0;
+		} else {
+			check++;
+		}
+		
+		return check;
+	}
+	
+	private void setImages() {
+		String filepath = currentDir + "/Image/" + imageList.get(currentImg);
+		File checkfile = new File(filepath);
+		if (checkfile.exists()) {
+			Bitmap playerBitmap = BitmapFactory.decodeFile(filepath);
+			playerImage.setImageBitmap(playerBitmap);
 			
-		    String filepath = currentDir + "/Image/" + imageList.get(currentImg);
-			File checkfile = new File(filepath);
-			if (checkfile.exists()) {
-				Bitmap bitmap = BitmapFactory.decodeFile(filepath);
-				playerImage.setImageBitmap(bitmap);
-			}
+			filepath = currentDir + "/Image/" + imageList.get(checkImageLeft(currentImg));
+			Bitmap leftBitmap = BitmapFactory.decodeFile(filepath);
+			leftImage.setImageBitmap(leftBitmap);
+			
+			filepath = currentDir + "/Image/" + imageList.get(checkImageRight(currentImg));
+			Bitmap rightBitmap = BitmapFactory.decodeFile(filepath);
+			rightImage.setImageBitmap(rightBitmap);
 		}
 	}
 	
@@ -225,77 +321,22 @@ public class ViewerFragment extends Fragment {
 				}
 			};
 			handler.postDelayed(notification, 1000);
+		} else {
+			playButton.setEnabled(true);
+			stopButton.setEnabled(false);
 		}
 	}
-		
-	OnTouchListener rowTouchListener = new OnTouchListener() {
-		@Override
-		public boolean onTouch(View view, MotionEvent event) {
-			LinearLayout layout = (LinearLayout)view;
-			int action = event.getAction();
-			switch (action) {
-				case (MotionEvent.ACTION_DOWN) :
-					layout.setBackgroundColor(0xFFA7A7A7);
-					break;
-				case (MotionEvent.ACTION_CANCEL) :
-				case (MotionEvent.ACTION_UP) :
-					layout.setBackgroundColor(0x00A7A7A7);
-					break;
-			}   	         				
-			return false;
-		}
-	};
 	
-	OnClickListener rowClickListener = new OnClickListener() {
+	OnClickListener imageChangeListener = new OnClickListener() {
 		@Override
 		public void onClick(View view) {
-			playClip(view.getId());	
-		}            		
-	};
-	
-	OnLongClickListener rowLongClickListener = new OnLongClickListener() {
-		@Override
-		public boolean onLongClick(View view) {
-			final Integer clipFile = view.getId();
-			final CharSequence[] listitem = { context.getResources().getString(R.string.rtonesetlist), context.getResources().getString(R.string.rtonesetkanmusu) };
-			AlertDialog.Builder listBuilder = new AlertDialog.Builder(context);
-			listBuilder.setItems(listitem, new DialogInterface.OnClickListener() {
-				public void onClick(DialogInterface dialog, int item) {				
-					if (item == 0) {
-						String filepath = currentDir + "/" + clipFile + ".mp3";						
-						settingsAdapter.setRingtone(context, filepath, currentKanmusu, clipFile);
-	
-						if (SettingsAdapter.use_shuffle == 1) {
-							SettingsAdapter.use_shuffle = 0;
-							settingsAdapter.saveSettings(context, 0);						
-							Toast.makeText(context, context.getResources().getString(R.string.rtoneunset), Toast.LENGTH_SHORT).show();
-						} else {
-							Toast.makeText(context, context.getResources().getString(R.string.rtoneset), Toast.LENGTH_SHORT).show();
-						}
-						
-						SettingsFragment.useShuffleBox.setChecked(false);
-					} else if (item == 1) {					
-						if (SettingsAdapter.use_shuffle == 0) {
-							SettingsAdapter.use_shuffle = 1;							
-							Toast.makeText(context, context.getResources().getString(R.string.rtoneshufenset), Toast.LENGTH_SHORT).show();
-						} else {
-							Toast.makeText(context, context.getResources().getString(R.string.rtoneshufset), Toast.LENGTH_SHORT).show();
-						}
-						
-						SettingsAdapter.viewer_kanmusu = currentKanmusu;
-						SettingsAdapter.shuffle_action = 3;
-						settingsAdapter.saveSettings(context, 0);						
-						SettingsFragment.useShuffleBox.setChecked(true);
-						SettingsFragment.shuffleSpinner.setSelection(SettingsAdapter.shuffle_action);
-						SettingsFragment.shuffleViewerText.setText(context.getResources().getString(R.string.viewerkantext) + " " + SettingsAdapter.viewer_kanmusu);						
-						settingsAdapter.shuffleRingtone(context);
-					}
-				}
-			});
-			AlertDialog alertList = listBuilder.create();
-			alertList.show();
+			if (view.getId() == R.id.leftimage) {
+				currentImg = checkImageLeft(currentImg);
+			} else if (view.getId() == R.id.rightimage) {
+				currentImg = checkImageRight(currentImg);
+			}
 			
-			return true;
+			setImages();
 		}            		
 	};
 	

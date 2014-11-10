@@ -19,4 +19,10 @@
         <item>Shuffle only current kanmusu clips</item>
         <item>Shuffle viewer selected kanmusu clips</item>
     </string-array>
+    
+    <string-array name="menulist">
+        <item>Kanmusu</item>        
+        <item>Sound</item>
+        <item>Viewer</item>
+    </string-array>
 </resources>

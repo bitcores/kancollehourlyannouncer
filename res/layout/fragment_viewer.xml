@@ -3,35 +3,22 @@
     android:layout_height="match_parent"
     android:padding="10dp"
     android:background="#FFECECEC" >
-         
-	<LinearLayout
-	    android:id="@+id/imagelayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:minWidth="300dp"
-        android:layout_alignParentRight="true"
-        android:layout_marginLeft="260dp"
-	    >
-		<ImageView
-	        android:id="@+id/viewerimage"
-	        android:layout_width="match_parent"
-	        android:layout_height="match_parent"              	   
-	        android:layout_marginTop="10dp"
-	        android:layout_marginBottom="10dp"
-	        android:adjustViewBounds="true"
-	        android:scaleType="fitCenter"
-	        android:contentDescription="@string/bgdesc"
-	        android:saveEnabled="false"
-	        />
-	</LinearLayout>
-	
+    
+    <TextView
+        android:id="@+id/kanmusutitle"
+        style="@style/titletext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:text="@string/kanmusulist" />
 
     <Spinner
 	    android:id="@+id/kanmususpinner"
-	    android:layout_width="250dp"
+	    android:layout_width="220dp"
 	    android:layout_height="wrap_content"
-	    android:layout_alignParentLeft="true"
-	    android:layout_alignParentTop="true"
+	    android:layout_alignLeft="@+id/kanmusutitle"
+	    android:layout_below="@+id/kanmusutitle"
 	    android:saveEnabled="false"
 	    />
     
@@ -46,27 +33,96 @@
     <ProgressBar
 	    android:id="@+id/playprogress"
 	    style="?android:attr/progressBarStyleHorizontal"
-	    android:layout_width="250dp"
+	    android:layout_width="220dp"
 	    android:layout_height="10dp"
 	     android:layout_alignLeft="@+id/msgbox"
 	    android:layout_below="@+id/msgbox"
         />
+        
+    <TextView 
+        android:id="@+id/cliptitle"
+        style="@style/titletext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignLeft="@+id/playerspinner"
+        android:layout_marginRight="5dp"
+        android:text="@string/soundclips"/>
     
-    <ScrollView
-        android:id="@+id/playerscrollview"
+    <Spinner
+        android:id="@+id/playerspinner"
         android:layout_width="250dp"
-        android:layout_height="fill_parent"
-        android:layout_alignLeft="@+id/playprogress"
-        android:layout_alignParentBottom="true"
-        android:layout_below="@+id/playprogress"
-        android:fadeScrollbars="false" >
-
-	    <TableLayout
-	        android:id="@+id/playertable"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/cliptitle" />
+    
+    <Button
+        android:id="@+id/playbutton"
+        style="@style/hugebutton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@+id/stopbutton"
+        android:layout_alignLeft="@+id/playerspinner"
+        android:layout_alignBottom="@+id/stopbutton"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="40dp"
+        android:text="@string/play" />
+    
+    <Button
+        android:id="@+id/stopbutton"
+        style="@style/hugebutton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/playerspinner"
+        android:layout_alignRight="@+id/playerspinner"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="20dp"
+        android:text="@string/stop" />
+    
+	<RelativeLayout
+	    android:id="@+id/imagelayout"
+	    android:layout_width="match_parent"
+	    android:layout_height="fill_parent"
+	    android:layout_alignParentBottom="true"
+	    android:layout_below="@+id/stopbutton" >
+	    
+	    <ImageView 
+	        android:id="@+id/leftimage"
+	        android:layout_width="75dp"
+        	android:layout_height="fill_parent"
+        	android:layout_centerVertical="true"
+        	android:layout_alignParentLeft="true"
+        	android:adjustViewBounds="true"
+	        android:scaleType="fitCenter"
+        	android:contentDescription="@string/bgdesc" />
+	
+	    <ImageView
+	        android:id="@+id/viewerimage"
 	        android:layout_width="match_parent"
-	        android:layout_height="wrap_content"
-	         >
-	    </TableLayout>
-	</ScrollView>
+	        android:layout_height="fill_parent"              	   
+	        android:layout_marginTop="40dp"
+	        android:layout_marginBottom="10dp"
+	        android:layout_marginLeft="10dp"
+	        android:layout_marginRight="10dp"
+	        android:layout_alignParentBottom="true"
+	        android:layout_centerHorizontal="true"
+	        android:layout_toRightOf="@+id/leftimage"
+	        android:layout_toLeftOf="@+id/rightimage"        
+	        android:adjustViewBounds="true"
+	        android:scaleType="fitCenter"
+	        android:contentDescription="@string/bgdesc"
+	        android:saveEnabled="false" />
+	    
+	    <ImageView 
+	        android:id="@+id/rightimage"
+	        android:layout_width="75dp"
+        	android:layout_height="fill_parent"
+        	android:layout_centerVertical="true"
+        	android:layout_alignParentRight="true"
+			android:adjustViewBounds="true"
+	        android:scaleType="fitCenter"
+        	android:contentDescription="@string/bgdesc" />
+   	
+    </RelativeLayout>
 
 </RelativeLayout>

@@ -1,0 +1,167 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp" >
+    
+    <RelativeLayout
+        android:id="@+id/settingsBgLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="10dp" >
+        
+	    <ImageView
+	        android:id="@+id/settingsBgImage"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"       
+	        android:layout_marginBottom="10dp"
+	        android:layout_above="@+id/settingsBgText"
+	        android:maxWidth="400dp"        
+	        android:adjustViewBounds="true"
+	        android:scaleType="centerInside"
+	        android:contentDescription="@string/bgdesc" />
+	    
+	    <TextView
+	        android:id="@+id/settingsBgText"
+	        style="@style/medtext"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_marginBottom="5dp"
+	        android:layout_alignParentBottom="true"
+	        android:layout_centerInParent="true" />
+    
+   	</RelativeLayout>
+
+    <TextView
+        android:id="@+id/mediaSpinnerTitle"
+        style="@style/bigtext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:text="@string/mediaspinnertitle" />
+    
+    <Spinner
+         android:id="@+id/mediaSpinner"
+         style="@style/medtext"
+         android:layout_width="200dp"
+         android:layout_height="wrap_content"
+         android:layout_alignLeft="@+id/quietHoursBox"
+         android:layout_below="@+id/mediaSpinnerTitle"
+         android:layout_marginTop="5dp"
+         android:prompt="@string/mediaspinner"
+         android:entries="@array/audiostream"
+         android:spinnerMode="dialog" />
+    
+    <CheckBox
+        android:id="@+id/quietHoursBox"
+        style="@style/medtext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/mediaSpinner"
+        android:layout_marginTop="20dp"
+        android:text="@string/quiethours" />
+    
+	<LinearLayout
+	    android:id="@+id/startTimeLayout"
+	    android:layout_width="160dp"
+    	android:layout_height="wrap_content"
+    	android:layout_alignParentLeft="true"
+	    android:layout_below="@+id/quietHoursBox"
+	    android:orientation="vertical"
+	    android:paddingTop="10dp"
+	    android:paddingBottom="10dp"
+	    android:paddingLeft="30dp"
+	    android:paddingRight="30dp" >
+	    
+	    <TextView
+	        android:id="@+id/quietHoursStartTitle"
+	        style="@style/bigtext"
+	        android:layout_width="fill_parent"
+	        android:layout_height="fill_parent"        
+	        android:text="@string/starttime"
+	        android:gravity="center" />
+	    
+	    <TextView
+	        android:id="@+id/quietHoursStart"
+	        style="@style/medtext"
+	        android:layout_width="fill_parent"
+	        android:layout_height="fill_parent"
+	        android:gravity="center" /> 
+	        
+    </LinearLayout>
+    
+	<LinearLayout
+	    android:id="@+id/endTimeLayout"
+	    android:layout_width="160dp"
+    	android:layout_height="wrap_content"
+    	android:layout_toRightOf="@+id/startTimeLayout"
+	    android:layout_alignTop="@+id/startTimeLayout"
+	    android:layout_marginLeft="60dp"
+	    android:orientation="vertical"
+	    android:paddingTop="10dp"
+	    android:paddingBottom="10dp"
+	    android:paddingLeft="30dp"
+	    android:paddingRight="30dp" >
+	    
+	    <TextView
+	        android:id="@+id/quietHoursEndTitle"
+	        style="@style/bigtext"
+	        android:layout_width="fill_parent"
+	        android:layout_height="fill_parent"        
+	        android:text="@string/endtime"
+	        android:gravity="center" />
+	
+	    <TextView
+	        android:id="@+id/quietHoursEnd"
+	        style="@style/medtext"
+	        android:layout_width="fill_parent"
+	        android:layout_height="fill_parent"
+	        android:gravity="center" />
+	    
+    </LinearLayout>
+         
+     <TextView
+         android:id="@+id/quietHoursVolumeTitle"
+         style="@style/medtext"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_alignParentLeft="true"
+         android:layout_below="@+id/startTimeLayout"
+         android:text="@string/quietvolume" />
+
+     <SeekBar
+         android:id="@+id/quietHoursVolume"
+         android:layout_width="400dp"
+         android:layout_height="wrap_content"
+         android:layout_alignParentLeft="true"
+         android:layout_below="@+id/quietHoursVolumeTitle"
+         android:layout_marginTop="5dp"
+         android:paddingLeft="20dp"
+         android:paddingRight="20dp" />
+     
+     <TextView
+        android:id="@+id/callSpinnerTitle"
+        style="@style/bigtext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/quietHoursVolume"
+        android:layout_marginTop="20dp"
+        android:layout_alignParentLeft="true"
+        android:text="@string/callspinnertitle" />
+     
+     <Spinner
+         android:id="@+id/callSpinner"
+         style="@style/medtext"
+         android:layout_width="200dp"
+         android:layout_height="wrap_content"
+         android:layout_alignLeft="@+id/quietHoursBox"
+         android:layout_below="@+id/callSpinnerTitle"
+         android:layout_marginTop="5dp"
+         android:prompt="@string/callspinner"
+         android:entries="@array/calltask"
+         android:spinnerMode="dialog" />
+
+</RelativeLayout>

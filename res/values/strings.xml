@@ -5,8 +5,8 @@
     <string name="action_settings">Settings</string>
     <string name="directory_default">Press to select directory</string>
     <string name="back_hint">Press back button to go up directory</string>
-    <string name="enable">ENABLE</string>
-    <string name="disable">DISABLE</string>
+    <string name="enable">Enable</string>
+    <string name="disable">Disable</string>
     <string name="scandir">SCAN DIR</string>
     <string name="savekanmusu">SAVE KANMUSU</string>
     <string name="selectall">Select All</string>
@@ -45,6 +45,22 @@
     <string name="startpicktitle">Select Start Hour</string>
     <string name="endpicktitle">Select End Hour</string>
 	<string name="shuffleclipselectiontext">Select shuffle list</string>
+	<string name="descopen">Desc Open</string>
+	<string name="descclosed">Desc Closed</string>
+	<string name="usekanmususelectiontext">Select kanmusu to use for announcements</string>
+	<string name="numfoundtitle">No. found: </string>
+	<string name="numusetitle">No. selected: </string>
+	<string name="kanmusu">kanmusu</string>
+	<string name="pickkanmusu">PICK KANMUSU</string>
+	<string name="enabletexttitle">Announcement: </string>
+	<string name="enabled">Enabled</string>
+	<string name="disabled">Disabled</string>
+	<string name="notset">Not Set</string>
+	<string name="shufflesettingstitle">Notification Shuffle Settings</string>
+	<string name="play">\u25BA</string>
+	<string name="stop">\u25A0</string>
+	<string name="kanmusulist">Kanmusu List</string>
+	<string name="soundclips">Sound Clips</string>
     
 
 </resources>

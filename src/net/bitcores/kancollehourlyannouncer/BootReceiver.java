@@ -25,7 +25,7 @@ public class BootReceiver extends BroadcastReceiver {
 			alarmAdapter.setAlarm(context);	
 		}
 			
-		context.startService(new Intent(context, AudioService.class));	
+		// context.startService(new Intent(context, AudioService.class));	
 	}
 }
 

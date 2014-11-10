@@ -1,6 +1,6 @@
 package net.bitcores.kancollehourlyannouncer;
 
-import net.bitcores.kancollehourlyannouncer.ViewerFragment;
+/*import net.bitcores.kancollehourlyannouncer.ViewerFragment;
 import net.bitcores.kancollehourlyannouncer.KanmusuFragment;
 import net.bitcores.kancollehourlyannouncer.SettingsFragment;
 import android.support.v4.app.Fragment;
@@ -18,8 +18,8 @@ public class PagerAdapter extends FragmentPagerAdapter {
 		switch (index) {
 		case 0:
 			return new ViewerFragment();
-		case 1:
-			return new KanmusuFragment();
+	//	case 1:
+	//		return new KanmusuFragment();
 		case 2:
 			return new SettingsFragment();
 		}
@@ -31,4 +31,4 @@ public class PagerAdapter extends FragmentPagerAdapter {
 		return 3;
 	}
 
-}
+}*/
