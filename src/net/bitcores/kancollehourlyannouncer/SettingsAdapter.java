@@ -1,11 +1,19 @@
 package net.bitcores.kancollehourlyannouncer;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Random;
 import java.util.Set;
 
@@ -22,10 +30,10 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class SettingsAdapter {
 	private SharedPreferences preferences;
+	private static final String LOG_FILE_NAME = "eventlog.txt";
 	
 	public static final String PREF_FILE_NAME = "settings";
 	public static Boolean init = false;
@@ -39,6 +47,8 @@ public class SettingsAdapter {
 	public static Integer quiet_volume = 0;
 	public static Integer use_shuffle = 0;
 	public static Integer shuffle_action = 0;
+	public static Integer enable_log = 1;
+	public static Integer verbose_log = 1;
 	public static String hourly_kanmusu = "";
 	public static String viewer_kanmusu = "";
 	public static List<String> full_list = new ArrayList<String>();
@@ -46,12 +56,13 @@ public class SettingsAdapter {
 	public static List<String> kanmusu_select = new ArrayList<String>();
 	public static List<String> kanmusu_use = new ArrayList<String>();
 	public static List<String> kanmusu_shufflelist = new ArrayList<String>();
+	public static List<String> event_log = new ArrayList<String>();
 	
 	// Luckily seeing the sound clips are all named in numbers and the numbers corespond to their use usage I can just make this huge list of
 	// names, generate the list based of file names and then deduce the file name from the id of the item in the list when pressed
 	// Images are done similarly
 	// I want to use this same list in the settings fragment for the shuffle list selection so it can be here instead
-	public static String[] kArray = new String[] { "Introduction", "Secretary 1", "Secretary 2", "Secretary 3", "Ship Construction", "Finish Repair", "Return from Sortie", "Show player's score", "Equipment 1", "Equipment 2",
+	public static final String[] kArray = new String[] { "Introduction", "Secretary 1", "Secretary 2", "Secretary 3", "Ship Construction", "Finish Repair", "Return from Sortie", "Show player's score", "Equipment 1", "Equipment 2",
 		"Docking", "Docking (heavy damage)", "Joining Fleet", "Start Sortie", "Battle Start", "Attack", "Air/Night Attack", "Night Battle", "Under fire 1", "Under fire 2", "Badly Damaged", "Sunk", "MVP", 
 		"Confession", "Library Intro", "Equipment 3", "Supply", "Secretary Wife", "Idle", "00:00", "01:00", "02:00", "03:00", "04:00", "05:00", "06:00", "07:00", "08:00", "09:00", "10:00", "11:00", "12:00", 
 		"13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00", "23:00" };
@@ -106,10 +117,28 @@ public class SettingsAdapter {
 			}
 		}
 		
+		File f = new File(context.getFilesDir(), LOG_FILE_NAME);
+		try {
+			BufferedReader br = new BufferedReader(new FileReader(f));
+			
+			String line;
+			while ((line = br.readLine()) != null){
+				event_log.add(line);
+			}
+			br.close();
+			
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+		}
+		
 		init = true;
 	}
 	
-	public void saveSettings(Context context, int toast) {
+	public void saveSettings(Context context) {
 		preferences = context.getSharedPreferences(PREF_FILE_NAME, Context.MODE_PRIVATE);
 		SharedPreferences.Editor editor = preferences.edit();
 		
@@ -143,10 +172,6 @@ public class SettingsAdapter {
 		editor.putStringSet("kanmusu_shufflelist", shufflelist_set);
 			
 		editor.commit();
-		
-		if (toast == 1) {
-			Toast.makeText(context, context.getResources().getString(R.string.saved), Toast.LENGTH_SHORT).show();
-		}
 	}
 	
 	public void sortList(List<String> tosort) {
@@ -255,19 +280,19 @@ public class SettingsAdapter {
 	
 	public void doBackground(ImageView bgImage, TextView bgText) {
 
-		if (SettingsAdapter.kanmusu_use.size() > 0) {
+		if (kanmusu_use.size() > 0) {
 			String kanmusu = getKanmusu();		
 
 			// The Arpeggio event characters didn't include an image 17.png but instead had a 16 and 18 that were usually combined to fill the place of 17
 			// we use 16 if 17 isn't present
 
 			boolean exist = false;
-			String filepath = SettingsAdapter.kancolle_dir + "/" + kanmusu + "/Image/image 17.png";
+			String filepath = kancolle_dir + "/" + kanmusu + "/Image/image 17.png";
 			File checkfile = new File(filepath);
 			if (checkfile.exists()) {
 				exist = true;
 			} else {
-				filepath = SettingsAdapter.kancolle_dir + "/" + kanmusu + "/Image/image 16.png";
+				filepath = kancolle_dir + "/" + kanmusu + "/Image/image 16.png";
 				checkfile = new File(filepath);				
 				if (checkfile.exists()) {
 					exist = true;
@@ -281,5 +306,45 @@ public class SettingsAdapter {
 			}			
 		}
 	}
+	
+	public void logEvent(String logMessage, Integer logLevel) {
+		Log.i("kancolle announcer", logMessage);
+		
+		Calendar cal = Calendar.getInstance();
+		SimpleDateFormat f = new SimpleDateFormat("HH:mm:ss.SSS E dd", Locale.US);
+		
+		if (enable_log == 1) {
+			if (logLevel < 5 || verbose_log == 1) {
+				//	I want a maximum of 128 entries in the log
+				while (event_log.size() > 128) {
+					event_log.remove(0);
+				}
+				
+				event_log.add(f.format(cal.getTimeInMillis()) + ": " + logMessage);				
+			}
+		}	
+	}
+	
+	public void writeLog(Context context) {
+		String output = "";
+		
+		for (String line : SettingsAdapter.event_log) {
+			output = output + line + "\n";
+		}
+		
+		try {
+			FileOutputStream fo = context.openFileOutput(LOG_FILE_NAME, Context.MODE_PRIVATE);
+			fo.write(output.getBytes());			
+		
+		} catch (FileNotFoundException e) {
+			logEvent("Eventlog: Log file could not be created. Please reinstall the app to fix.", 0);
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO
+			e.printStackTrace();
+		}
+	}
+
+
 	
 }

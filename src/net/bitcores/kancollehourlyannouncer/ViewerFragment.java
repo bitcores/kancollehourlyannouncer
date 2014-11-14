@@ -5,10 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
@@ -19,18 +16,15 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
-import android.view.View.OnTouchListener;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -39,6 +33,7 @@ import android.widget.AdapterView.OnItemSelectedListener;
 
 public class ViewerFragment extends Fragment {
 	private static SettingsAdapter settingsAdapter;
+	private static AudioAdapter audioAdapter;
 
 	private static Activity context;		
 	private static View rootView;
@@ -73,8 +68,9 @@ public class ViewerFragment extends Fragment {
 		setHasOptionsMenu(true);
 		rootView = inflater.inflate(R.layout.fragment_viewer, container, false);
 
-		context = getActivity();	
-		settingsAdapter = new SettingsAdapter();
+		context = getActivity();
+		audioAdapter = new AudioAdapter();
+		settingsAdapter = new SettingsAdapter();		
 		
 		pb = (ProgressBar)rootView.findViewById(R.id.playprogress);
 		kanmusuSpinner = (Spinner)rootView.findViewById(R.id.kanmususpinner);
@@ -142,8 +138,7 @@ public class ViewerFragment extends Fragment {
 			settingsAdapter.setRingtone(context, filepath, currentKanmusu, currentId);
 
 			if (SettingsAdapter.use_shuffle == 1) {
-				SettingsAdapter.use_shuffle = 0;
-				settingsAdapter.saveSettings(context, 0);						
+				SettingsAdapter.use_shuffle = 0;					
 				Toast.makeText(context, context.getResources().getString(R.string.rtoneunset), Toast.LENGTH_SHORT).show();
 			} else {
 				Toast.makeText(context, context.getResources().getString(R.string.rtoneset), Toast.LENGTH_SHORT).show();
@@ -158,8 +153,7 @@ public class ViewerFragment extends Fragment {
 			}
 			
 			SettingsAdapter.viewer_kanmusu = currentKanmusu;
-			SettingsAdapter.shuffle_action = 3;
-			settingsAdapter.saveSettings(context, 0);											
+			SettingsAdapter.shuffle_action = 3;										
 			settingsAdapter.shuffleRingtone(context);
 	        return true;
 	    default:
@@ -171,9 +165,11 @@ public class ViewerFragment extends Fragment {
 	
 	private void setupPage() {
 		ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, SettingsAdapter.full_list);
+		spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		kanmusuSpinner.setAdapter(spinnerAdapter);
 		if (SettingsAdapter.full_list.size() == 0) {
 			kanmusuSpinner.setEnabled(false);
+			playerSpinner.setEnabled(false);
 			imageList.clear();
 			clipList.clear();
 			nameList.clear();
@@ -187,6 +183,7 @@ public class ViewerFragment extends Fragment {
 			}
 		} else { 
 			kanmusuSpinner.setEnabled(true);
+			playerSpinner.setEnabled(true);
 			kanmusuSpinner.setSelection(SettingsAdapter.full_list.indexOf(SettingsAdapter.hourly_kanmusu));
 			msgBox.setText("");
 		}
@@ -221,7 +218,9 @@ public class ViewerFragment extends Fragment {
 	        		}
 	        	}
 	        	
-	        	playerSpinner.setAdapter(new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, clipList));
+	        	ArrayAdapter<String> playerAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, clipList);        	
+	        	playerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+	        	playerSpinner.setAdapter(playerAdapter);
 	        	
 	        	// Because the number and numbering of image files is not entirely consistent we have to actually build an array of them
 	        	for (File file : dirImage.listFiles()) {
@@ -250,29 +249,27 @@ public class ViewerFragment extends Fragment {
 	}
 	
 	private void playClip(Integer filename) {
-		String filepath = currentDir + "/" + filename + ".mp3";
-		File checkfile = new File(filepath);
-		if (checkfile.exists()) {
-			Intent intent = new Intent(context, AudioService.class);
-			intent.putExtra("TYPE", "file");
-			intent.putExtra("FILE", filepath);
-			intent.putExtra("INTERRUPT", 0);
-			context.startService(intent);
-			
+		String filePath = currentDir + "/" + filename + ".mp3";
+		
+		Boolean result = audioAdapter.playAudio(context, "file", 0, null, filePath);
+		
+		if (result) {
 			playButton.setEnabled(false);
 			stopButton.setEnabled(true);
+		} else {
+			
 		}
+		
 	}
 	
-	private void stopClip() {
-		Intent intent = new Intent(context, AudioService.class);
-		intent.putExtra("TYPE", "none");
-		intent.putExtra("FILE", "none");
-		intent.putExtra("INTERRUPT", 1);
-		context.startService(intent);
-		
-		playButton.setEnabled(true);
-		stopButton.setEnabled(false);
+	private void stopClip() {		
+		Boolean result = audioAdapter.stopAudio(1);
+		if (result) {
+			playButton.setEnabled(true);
+			stopButton.setEnabled(false);
+		} else {
+			
+		}
 	}
 		
 	private Integer checkImageLeft(Integer check) {

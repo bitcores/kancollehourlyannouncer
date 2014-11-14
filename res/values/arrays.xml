@@ -20,9 +20,13 @@
         <item>Shuffle viewer selected kanmusu clips</item>
     </string-array>
     
-    <string-array name="menulist">
+    <string-array name="topmenu">
         <item>Kanmusu</item>        
         <item>Sound</item>
         <item>Viewer</item>
+    </string-array>
+    
+    <string-array name="bottommenu">
+        <item>Log</item>        
     </string-array>
 </resources>

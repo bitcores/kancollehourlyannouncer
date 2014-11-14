@@ -127,10 +127,8 @@ public class WidgetShare {
 					widgetView.setTextViewText(R.id.clockText, currentTime);
 					
 					
-					Intent secretaryIntent = new Intent(context, AudioService.class);
+					Intent secretaryIntent = new Intent(context, AnnounceService.class);
 					secretaryIntent.putExtra("TYPE", "secretary");
-					secretaryIntent.putExtra("FILE", "empty");
-					secretaryIntent.putExtra("INTERRUPT", 0);
 					PendingIntent psecretaryIntent = PendingIntent.getService(context, 50505, secretaryIntent, 0);
 					
 					//	SET INTENTS

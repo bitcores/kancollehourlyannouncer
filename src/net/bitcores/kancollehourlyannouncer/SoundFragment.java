@@ -7,6 +7,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
@@ -27,6 +29,7 @@ import android.widget.TextView;
 
 public class SoundFragment extends Fragment {
 	private static SettingsAdapter settingsAdapter;
+	private static AudioAdapter audioAdapter;
 	
 	private static Activity context;
 	private static BackgroundReceiver backgroundReceiver;
@@ -53,6 +56,7 @@ public class SoundFragment extends Fragment {
 
 		context = getActivity();
 		settingsAdapter = new SettingsAdapter();
+		audioAdapter = new AudioAdapter();
 	
 		LinearLayout startTimeLayout = (LinearLayout)rootView.findViewById(R.id.startTimeLayout);
 		LinearLayout endTimeLayout = (LinearLayout)rootView.findViewById(R.id.endTimeLayout);
@@ -141,21 +145,15 @@ public class SoundFragment extends Fragment {
 		public void onStopTrackingTouch(SeekBar seekBar) {
 			int progress = seekBar.getProgress();
 			SettingsAdapter.quiet_volume = progress;
+			Uri notifysound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 			
-			Intent intent = new Intent(context, AudioService.class);
-			intent.putExtra("TYPE", "quiet");
-			intent.putExtra("FILE", "none");
-			intent.putExtra("INTERRUPT", 2);
-			context.startService(intent);			
+			//	I may want to test the results of the play/stop audio in the future, but for now I think it is fine
+			audioAdapter.playAudio(context, "quiet", 2, notifysound, "");
 		}
 		
 		@Override
 		public void onStartTrackingTouch(SeekBar seekBar) {
-			Intent intent = new Intent(context, AudioService.class);
-			intent.putExtra("TYPE", "none");
-			intent.putExtra("FILE", "none");
-			intent.putExtra("INTERRUPT", 3);
-			context.startService(intent);
+			audioAdapter.stopAudio(3);
 		}
 		
 		@Override

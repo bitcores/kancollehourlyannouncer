@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Kancolle Hourly Announcer</string>
+    <string name="app_name">Kancolle Announcer</string>
     <string name="action_settings">Settings</string>
     <string name="directory_default">Press to select directory</string>
     <string name="back_hint">Press back button to go up directory</string>
@@ -45,8 +45,8 @@
     <string name="startpicktitle">Select Start Hour</string>
     <string name="endpicktitle">Select End Hour</string>
 	<string name="shuffleclipselectiontext">Select shuffle list</string>
-	<string name="descopen">Desc Open</string>
-	<string name="descclosed">Desc Closed</string>
+	<string name="descopen">Navigation Drawer Open</string>
+	<string name="descclosed">Navigation Drawer Closed</string>
 	<string name="usekanmususelectiontext">Select kanmusu to use for announcements</string>
 	<string name="numfoundtitle">No. found: </string>
 	<string name="numusetitle">No. selected: </string>

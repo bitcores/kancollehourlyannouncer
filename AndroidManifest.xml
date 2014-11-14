@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="net.bitcores.kancollehourlyannouncer"
     android:versionCode="1"
-    android:versionName="1.2.0a" >
+    android:versionName="1.2.0c" >
 
     <uses-sdk
         android:minSdkVersion="14"
@@ -30,7 +30,7 @@
             </intent-filter>
         </activity>
         <service
-            android:name=".AudioService" >
+            android:name=".AnnounceService" >
         </service>
         <receiver
             android:name=".BootReceiver" >

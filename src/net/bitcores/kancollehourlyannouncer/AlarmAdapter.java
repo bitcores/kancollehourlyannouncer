@@ -9,7 +9,6 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
-import android.util.Log;
 
 public class AlarmAdapter {
 	PendingIntent pendingIntent;
@@ -28,12 +27,11 @@ public class AlarmAdapter {
 		cal.set(Calendar.MILLISECOND, 0);
 		SimpleDateFormat f = new SimpleDateFormat("HH:mm E dd", Locale.US);
 		
-		Log.i("kancolle announcer", "Alarm set for: " + f.format(cal.getTimeInMillis()));
+		SettingsAdapter settingsAdapter = new SettingsAdapter();
+		settingsAdapter.logEvent("Alarm set for: " + f.format(cal.getTimeInMillis()), 0);
 		
-		Intent intent = new Intent(context, AudioService.class);
+		Intent intent = new Intent(context, AnnounceService.class);
 		intent.putExtra("TYPE", "announce");
-		intent.putExtra("FILE", "none");
-		intent.putExtra("INTERRUPT", 9);
 		pendingIntent = PendingIntent.getService(context, 55559, intent, PendingIntent.FLAG_CANCEL_CURRENT);
 		AlarmManager alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
 		//	Kitkat uses inexact alarms unless setExact is used
@@ -45,11 +43,13 @@ public class AlarmAdapter {
 	}
 	
 	public void stopAlarm(Context context) {
-		Intent intent = new Intent(context, AudioService.class);
+		Intent intent = new Intent(context, AnnounceService.class);
 		pendingIntent = PendingIntent.getService(context, 55559, intent, PendingIntent.FLAG_CANCEL_CURRENT);
 		AlarmManager alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
 		alarmManager.cancel(pendingIntent);
-		Log.i("kancolle announcer", "Alarm disabled");
+		
+		SettingsAdapter settingsAdapter = new SettingsAdapter();
+		settingsAdapter.logEvent("Alarm disabled", 0);
 	}
 
 }

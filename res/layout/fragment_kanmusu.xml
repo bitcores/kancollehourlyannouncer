@@ -7,6 +7,7 @@
         android:id="@+id/kanmusuBgLayout"
         android:layout_width="wrap_content"
         android:layout_height="fill_parent"
+        android:layout_below="@+id/selectAllBox"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_marginRight="10dp" >
@@ -65,7 +66,7 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/dirSelect"
         android:layout_below="@+id/dirSelect"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="10dp"
         android:text="@string/numfoundtitle" />
     
     <TextView

@@ -15,20 +15,20 @@
 
     <Spinner
 	    android:id="@+id/kanmususpinner"
+	    style="@style/medtext"
 	    android:layout_width="220dp"
 	    android:layout_height="wrap_content"
 	    android:layout_alignLeft="@+id/kanmusutitle"
 	    android:layout_below="@+id/kanmusutitle"
 	    android:saveEnabled="false"
-	    />
+	    android:spinnerMode="dialog" />
     
     <TextView
 	    android:id="@+id/msgbox"
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
 	    android:layout_marginLeft="5dp"
-	    android:layout_below="@+id/kanmususpinner"
-		/>
+	    android:layout_below="@+id/kanmususpinner" />
     
     <ProgressBar
 	    android:id="@+id/playprogress"
@@ -36,8 +36,7 @@
 	    android:layout_width="220dp"
 	    android:layout_height="10dp"
 	     android:layout_alignLeft="@+id/msgbox"
-	    android:layout_below="@+id/msgbox"
-        />
+	    android:layout_below="@+id/msgbox" />
         
     <TextView 
         android:id="@+id/cliptitle"
@@ -47,14 +46,16 @@
         android:layout_alignParentTop="true"
         android:layout_alignLeft="@+id/playerspinner"
         android:layout_marginRight="5dp"
-        android:text="@string/soundclips"/>
+        android:text="@string/soundclips" />
     
     <Spinner
         android:id="@+id/playerspinner"
+        style="@style/medtext"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_below="@+id/cliptitle" />
+        android:layout_below="@+id/cliptitle"
+        android:spinnerMode="dialog" />
     
     <Button
         android:id="@+id/playbutton"

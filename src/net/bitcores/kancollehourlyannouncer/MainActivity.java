@@ -3,70 +3,66 @@ package net.bitcores.kancollehourlyannouncer;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
-import android.content.Intent;
 import android.content.res.Configuration;
 
 public class MainActivity extends Activity {
+	private AlarmAdapter alarmAdapter;
 	private SettingsAdapter settingsAdapter;
 	private DrawerLayout mDrawerLayout;
-	private ListView mDrawerList;
-	private String[] mPageTitles;
+	private RelativeLayout mDrawerList;
+	private ListView mTop;
+	private ListView mBottom;
+	private String[] mTopTitles;
+	private String[] mBottomTitles;
 	private ActionBarDrawerToggle mDrawerToggle;
 	private CharSequence mDrawerTitle;
     private CharSequence mTitle;
+    
+    private int currentPosition = 0;
     
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		settingsAdapter = new SettingsAdapter();
-		
+		alarmAdapter = new AlarmAdapter();
+		settingsAdapter = new SettingsAdapter();	
 		if (!SettingsAdapter.init) {
 			settingsAdapter.initSettings(MainActivity.this);
 		}
-		
+				
 		setContentView(R.layout.activity_main);
 		
-		
-		//	I may want to put some form of splash screen here at some point, or create a custom layout so that there is no title bar at all
-		startService(new Intent(MainActivity.this, AudioService.class));
-		//startActivity(new Intent(MainActivity.this, PagerActivity.class));
-		
+		//startService(new Intent(MainActivity.this, AnnounceService.class));
+
 		mTitle = mDrawerTitle = getTitle();
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mDrawerList = (ListView) findViewById(R.id.menu_drawer);
-        mPageTitles = getResources().getStringArray(R.array.menulist);
+        mDrawerList = (RelativeLayout) findViewById(R.id.menu_drawer);
+        mTop = (ListView) findViewById(R.id.top_menu);
+        mBottom = (ListView) findViewById(R.id.bottom_menu);
+        mTopTitles = getResources().getStringArray(R.array.topmenu);
+        mBottomTitles = getResources().getStringArray(R.array.bottommenu);
         
-        mDrawerList.setAdapter(new ArrayAdapter<String>(this, R.layout.drawer_list_item, mPageTitles));
-        mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
-        
-                
-        mDrawerToggle = new ActionBarDrawerToggle(
-                this,                  
-                mDrawerLayout,         
-                R.drawable.ic_drawer,  /* nav drawer icon to replace 'Up' caret */
-                R.string.descopen,  /* "open drawer" description */
-                R.string.descclosed  /* "close drawer" description */
-                ) {
-
-            /** Called when a drawer has settled in a completely closed state. */
+        mTop.setAdapter(new ArrayAdapter<String>(this, R.layout.drawer_list_item, mTopTitles));
+        mBottom.setAdapter(new ArrayAdapter<String>(this, R.layout.drawer_list_item, mBottomTitles));
+        mTop.setOnItemClickListener(new DrawerItemClickListener());
+        mBottom.setOnItemClickListener(new DrawerItemClickListener());
+                      
+        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.drawable.ic_drawer, R.string.descopen, R.string.descclosed) {
             public void onDrawerClosed(View view) {
                 super.onDrawerClosed(view);
                 getActionBar().setTitle(mTitle);
             }
 
-            /** Called when a drawer has settled in a completely open state. */
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
                 getActionBar().setTitle(mDrawerTitle);
@@ -81,48 +77,27 @@ public class MainActivity extends Activity {
         
         
         if (savedInstanceState == null) {
-            selectItem(0);
+            selectItem(mTop, 0);
+            mTop.setItemChecked(0, true);
+            
+            if (SettingsAdapter.enabled == 1) {
+    			alarmAdapter.setAlarm(MainActivity.this);
+    		}
         }
 	}
 	
-	private void selectItem(int position) {
+	@Override
+	protected void onPause() {
+		super.onPause();
 		
-		Fragment fragment = getFragment(position);
-        FragmentManager fragmentManager = getFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.fragment_frame, fragment).commit();
-        
-        mDrawerList.setItemChecked(position, true);
-        setTitle(mPageTitles[position]);
-        mDrawerLayout.closeDrawer(mDrawerList);
-
+		settingsAdapter.saveSettings(MainActivity.this);
+		settingsAdapter.writeLog(MainActivity.this);
 	}
 	
-
-    // Called whenever we call invalidateOptionsMenu() 
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        // If the nav drawer is open, hide action items related to the content view
-        boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
-        return super.onPrepareOptionsMenu(menu);
-    }
-    
-  /*  @Override
-    public boolean onCreateOptionsMenu(Menu menu) {	
-	    MenuInflater inflater = getMenuInflater();
-	    inflater.inflate(R.menu.viewerfragment_actions, menu);
-	    return super.onCreateOptionsMenu(menu);
-	}*/
-	
-	@Override
-    public void setTitle(CharSequence title) {
-        mTitle = title;
-        getActionBar().setTitle(mTitle);
-    }
 	
 	@Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        // Sync the toggle state after onRestoreInstanceState has occurred.
         mDrawerToggle.syncState();
     }
 
@@ -134,24 +109,53 @@ public class MainActivity extends Activity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Pass the event to ActionBarDrawerToggle, if it returns
-        // true, then it has handled the app icon touch event
         if (mDrawerToggle.onOptionsItemSelected(item)) {
           return true;
         }
-        // Handle your other action bar items...
-
+        
         return super.onOptionsItemSelected(item);
     }
+    
+    private void setTitle(View view) {
+		if (view.getId() == R.id.top_menu) {
+			mTitle = mTopTitles[currentPosition];
+		} else if (view.getId() == R.id.bottom_menu) {
+			mTitle = mBottomTitles[currentPosition];
+		}
+        getActionBar().setTitle(mTitle);
+    }
+    
+    private void selectItem(View view, int position) {
+		
+		Fragment fragment = getFragment(view, position);
+		if (fragment != null) {
+	        FragmentManager fragmentManager = getFragmentManager();
+	        fragmentManager.beginTransaction().replace(R.id.fragment_frame, fragment).commit();
+	        
+	        currentPosition = position;
+	        setTitle(view);
+	        mDrawerLayout.closeDrawer(mDrawerList);
+		}
 
-	public Fragment getFragment(int index) {
-		switch (index) {
-		case 0:
-			return new KanmusuFragment();
-		case 1:
-			return new SoundFragment();	
-		case 2:
-			return new ViewerFragment();
+	}
+
+	private Fragment getFragment(View view, int index) {
+		if (view.getId() == R.id.top_menu) {
+			mBottom.setItemChecked(currentPosition, false);
+			switch (index) {
+			case 0:
+				return new KanmusuFragment();
+			case 1:
+				return new SoundFragment();	
+			case 2:
+				return new ViewerFragment();
+			}
+		} else if (view.getId() == R.id.bottom_menu) {
+			mTop.setItemChecked(currentPosition, false);
+			switch (index) {
+			case 0:
+				return new LogFragment();
+			}
 		}
 		return null;
 	}
@@ -159,15 +163,8 @@ public class MainActivity extends Activity {
 	private class DrawerItemClickListener implements ListView.OnItemClickListener {
 		@Override
 		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-			selectItem(position);			
+			selectItem(parent, position);			
 		}	
-	}
-	
-	@Override
-	protected void onPause() {
-		super.onPause();
-		
-		settingsAdapter.saveSettings(MainActivity.this, 0);
 	}
 		
 }
