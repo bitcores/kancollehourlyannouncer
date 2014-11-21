@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+    
+    <item
+		android:id="@+id/action_logrefreshbutton"
+		android:orderInCategory="100"
+		android:showAsAction="always"
+		android:title="@string/refreshtitle" />
+    
+    <item
+        android:id="@+id/action_logenable"
+        android:orderInCategory="200"
+        android:showAsAction="never"
+        android:checkable="true"
+        android:title="@string/logenabletitle" />
+    
+    <item
+        android:id="@+id/action_logverbose"
+        android:orderInCategory="300"
+        android:showAsAction="never"
+        android:checkable="true"
+        android:title="@string/logverbosetitle" />
+    
+</menu>

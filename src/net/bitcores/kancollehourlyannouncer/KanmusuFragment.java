@@ -264,7 +264,8 @@ public class KanmusuFragment extends Fragment {
 	@Override
 	public void onResume() {
 		super.onResume();		
-		IntentFilter filter = new IntentFilter();
+		settingsAdapter.doBackground(bgImage, bgText);
+		IntentFilter filter = new IntentFilter();	
 		backgroundReceiver = new BackgroundReceiver();
 		filter.addAction(WidgetShare.UPDATE_WIDGET);
 		context.registerReceiver(backgroundReceiver, filter);

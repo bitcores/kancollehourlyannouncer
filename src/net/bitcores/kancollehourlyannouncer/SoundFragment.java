@@ -125,7 +125,8 @@ public class SoundFragment extends Fragment {
 	
 	@Override
 	public void onResume() {
-		super.onResume();		
+		super.onResume();
+		settingsAdapter.doBackground(bgImage, bgText);
 		IntentFilter filter = new IntentFilter();
 		backgroundReceiver = new BackgroundReceiver();
 		filter.addAction(WidgetShare.UPDATE_WIDGET);

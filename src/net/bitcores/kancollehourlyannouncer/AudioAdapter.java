@@ -23,12 +23,12 @@ public class AudioAdapter {
 	
 	public boolean playAudio(Context context, String type, Integer interrupt, Uri clipUri, String filePath) {
 		if (!initMediaPlayer(interrupt)) {
-			logMessage(1, clipUri, filePath);
+			logMessage(1, clipUri, filePath, 0);
 			return false;
 		}
 		
 		if (!setDataSource(context, clipUri, filePath)) {
-			logMessage(2, clipUri, filePath);
+			logMessage(2, clipUri, filePath, 0);
 			return false;
 		}
 		
@@ -36,11 +36,11 @@ public class AudioAdapter {
 		setVolume(context, type);
 		
 		if (!startMediaPlayer(type, interrupt, clipUri, filePath)) {
-			logMessage(3, clipUri, filePath);
+			logMessage(3, clipUri, filePath, 0);
 			return false;
 			
 		} else {
-			logMessage(0, clipUri, filePath);
+			logMessage(0, clipUri, filePath, 0);
 			
 			interruptLevel = interrupt;
 			
@@ -166,7 +166,7 @@ public class AudioAdapter {
 				@Override
 				public void onCompletion(MediaPlayer mp) {
 					// Because we want the service to stay alive and be ready to play other clips we reset the player instead of releasing it
-					logMessage(4, null, "");
+					logMessage(4, null, "", 5);
 					mp.reset();
 					interruptLevel = 0;
 				}
@@ -185,7 +185,7 @@ public class AudioAdapter {
 	}
 	
 	//	Generate error message for log
-	private void logMessage(Integer errorLevel, Uri clipUri, String filePath) {
+	private void logMessage(Integer errorLevel, Uri clipUri, String filePath, Integer verbose) {
 		String message = "";
 		String media = "";
 		if (clipUri != null) {
@@ -207,6 +207,6 @@ public class AudioAdapter {
 		}
 		
 		SettingsAdapter settingsAdapter = new SettingsAdapter();
-		settingsAdapter.logEvent(message, 0);
+		settingsAdapter.logEvent(message, verbose);
 	}
 }

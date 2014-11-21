@@ -119,7 +119,10 @@ public class ViewerFragment extends Fragment {
 			}		
 		});
 		
-		setupPage();	
+		if (savedInstanceState == null) {
+			currentKanmusu = SettingsAdapter.hourly_kanmusu;
+		}
+		setupPage();
 		
 		return rootView;
 	}
@@ -184,7 +187,7 @@ public class ViewerFragment extends Fragment {
 		} else { 
 			kanmusuSpinner.setEnabled(true);
 			playerSpinner.setEnabled(true);
-			kanmusuSpinner.setSelection(SettingsAdapter.full_list.indexOf(SettingsAdapter.hourly_kanmusu));
+			kanmusuSpinner.setSelection(SettingsAdapter.full_list.indexOf(currentKanmusu));
 			msgBox.setText("");
 		}
 		

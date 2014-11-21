@@ -35,8 +35,11 @@ public final class R {
         public static final int widget_back=0x7f020003;
     }
     public static final class id {
-        public static final int action_setkanmusugroup=0x7f0b004a;
-        public static final int action_setringtone=0x7f0b0049;
+        public static final int action_logenable=0x7f0b004a;
+        public static final int action_logrefreshbutton=0x7f0b0049;
+        public static final int action_logverbose=0x7f0b004b;
+        public static final int action_setkanmusugroup=0x7f0b004d;
+        public static final int action_setringtone=0x7f0b004c;
         public static final int announceStatus=0x7f0b001f;
         public static final int bgimage=0x7f0b0005;
         public static final int bottom_menu=0x7f0b0004;
@@ -129,7 +132,8 @@ public final class R {
         public static final int widget_clockresizablem=0x7f03000e;
     }
     public static final class menu {
-        public static final int viewerfragment_actions=0x7f0a0000;
+        public static final int logfragment_actions=0x7f0a0000;
+        public static final int viewerfragment_actions=0x7f0a0001;
     }
     public static final class string {
         public static final int action_settings=0x7f080001;
@@ -156,6 +160,8 @@ public final class R {
         public static final int endtimesub=0x7f080028;
         public static final int kanmusu=0x7f080031;
         public static final int kanmusulist=0x7f08003a;
+        public static final int logenabletitle=0x7f08003d;
+        public static final int logverbosetitle=0x7f08003e;
         public static final int mediaspinner=0x7f080015;
         public static final int mediaspinnertitle=0x7f08000e;
         public static final int minutefill=0x7f080022;
@@ -166,6 +172,7 @@ public final class R {
         public static final int play=0x7f080038;
         public static final int quiethours=0x7f080010;
         public static final int quietvolume=0x7f080013;
+        public static final int refreshtitle=0x7f08003c;
         public static final int rowfill=0x7f080024;
         public static final int rowstitle=0x7f080026;
         public static final int rtoneset=0x7f08001b;

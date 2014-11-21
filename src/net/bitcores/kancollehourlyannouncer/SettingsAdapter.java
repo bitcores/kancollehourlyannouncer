@@ -47,8 +47,8 @@ public class SettingsAdapter {
 	public static Integer quiet_volume = 0;
 	public static Integer use_shuffle = 0;
 	public static Integer shuffle_action = 0;
-	public static Integer enable_log = 1;
-	public static Integer verbose_log = 1;
+	public static Integer enable_log = 0;
+	public static Integer verbose_log = 0;
 	public static String hourly_kanmusu = "";
 	public static String viewer_kanmusu = "";
 	public static List<String> full_list = new ArrayList<String>();
@@ -84,6 +84,8 @@ public class SettingsAdapter {
 		quiet_volume = preferences.getInt("quiet_volume", 0);
 		use_shuffle = preferences.getInt("use_shuffle", 0);
 		shuffle_action = preferences.getInt("shuffle_action", 0);
+		enable_log = preferences.getInt("enable_log", 0);
+		verbose_log = preferences.getInt("verbose_log", 0);
 		hourly_kanmusu = preferences.getString("hourly_kanmusu", "");
 		viewer_kanmusu = preferences.getString("viewer_kanmusu", "");
 		
@@ -152,6 +154,8 @@ public class SettingsAdapter {
 		editor.putInt("quiet_volume", quiet_volume);
 		editor.putInt("use_shuffle", use_shuffle);
 		editor.putInt("shuffle_action", shuffle_action);
+		editor.putInt("enable_log", enable_log);
+		editor.putInt("verbose_log", verbose_log);		
 		editor.putString("hourly_kanmusu", hourly_kanmusu);
 		editor.putString("viewer_kanmusu", viewer_kanmusu);
 		
@@ -279,10 +283,14 @@ public class SettingsAdapter {
 	}
 	
 	public void doBackground(ImageView bgImage, TextView bgText) {
-
 		if (kanmusu_use.size() > 0) {
-			String kanmusu = getKanmusu();		
-
+			String kanmusu = getKanmusu();
+			
+			//	Don't update if the kanmusu is the same as the current one
+			if (bgText.getText().toString().equals(kanmusu)) {
+				return;
+			}
+			
 			// The Arpeggio event characters didn't include an image 17.png but instead had a 16 and 18 that were usually combined to fill the place of 17
 			// we use 16 if 17 isn't present
 

@@ -61,6 +61,9 @@
 	<string name="stop">\u25A0</string>
 	<string name="kanmusulist">Kanmusu List</string>
 	<string name="soundclips">Sound Clips</string>
+	<string name="refreshtitle">Refresh</string>
+	<string name="logenabletitle">Enable logging</string>
+	<string name="logverbosetitle">Verbose logging</string>
     
 
 </resources>
