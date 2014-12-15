@@ -33,7 +33,7 @@
     <string name="rtoneshufenset">Shuffle group set, Shuffle enabled</string>
     <string name="rtonesetlist">Set clip as notification ringtone</string>
     <string name="rtonesetkanmusu">Set this kanmusu\'s clips as shuffle group</string>
-    <string name="viewerkantext">Viewer kanmusu:</string>
+    <string name="viewerkantext">Viewer kanmusu: </string>
     <string name="shufflespinner">Choose Shuffle Type</string>
     <string name="minutefill">: 00</string>
     <string name="columnfill">columns</string>
@@ -48,7 +48,8 @@
 	<string name="descopen">Navigation Drawer Open</string>
 	<string name="descclosed">Navigation Drawer Closed</string>
 	<string name="usekanmususelectiontext">Select kanmusu to use for announcements</string>
-	<string name="numfoundtitle">No. found: </string>
+	<string name="numfoundtitle">No. found total: </string>
+	<string name="numclipstitle">No. with clips: </string>
 	<string name="numusetitle">No. selected: </string>
 	<string name="kanmusu">kanmusu</string>
 	<string name="pickkanmusu">PICK KANMUSU</string>
@@ -64,6 +65,13 @@
 	<string name="refreshtitle">Refresh</string>
 	<string name="logenabletitle">Enable logging</string>
 	<string name="logverbosetitle">Verbose logging</string>
+	<string name="setsecretary">Set this kanmusu as Secretary</string>
+	<string name="secretarykantext">Viewer selected Secretary: </string>
+	<string name="backgroundstitletext">Background Image Settings</string>
+	<string name="widgetstitletext">Widget Image Settings</string>
+	<string name="imgselectspinner">Select Secretary Kanmusu</string>
+	<string name="imgtypespinner">Select Image Type</string>
+	<string name="secretaryset">Kanmusu Secretary Set</string>
     
 
 </resources>

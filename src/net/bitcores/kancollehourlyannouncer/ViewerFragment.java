@@ -7,11 +7,11 @@ import java.util.List;
 import android.app.Activity;
 import android.app.Dialog;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.app.Fragment;
+import android.content.res.Configuration;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -34,6 +34,7 @@ import android.widget.AdapterView.OnItemSelectedListener;
 public class ViewerFragment extends Fragment {
 	private static SettingsAdapter settingsAdapter;
 	private static AudioAdapter audioAdapter;
+	private static BitmapAdapter bitmapAdapter;
 
 	private static Activity context;		
 	private static View rootView;
@@ -56,7 +57,7 @@ public class ViewerFragment extends Fragment {
 	
 	private final Handler handler = new Handler();
 	List<String> imageList = new ArrayList<String>();
-	List<String> clipList= new ArrayList<String>();
+	List<String> clipList = new ArrayList<String>();
 	List<Integer> nameList = new ArrayList<Integer>();
 	
 	public ViewerFragment() {
@@ -66,11 +67,20 @@ public class ViewerFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		setHasOptionsMenu(true);
-		rootView = inflater.inflate(R.layout.fragment_viewer, container, false);
+		
+		Integer layout = null;
+		if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+			layout = R.layout.fragment_viewer_land;
+		} else {
+			layout = R.layout.fragment_viewer;
+		}
+		
+		rootView = inflater.inflate(layout, container, false);
 
 		context = getActivity();
 		audioAdapter = new AudioAdapter();
-		settingsAdapter = new SettingsAdapter();		
+		settingsAdapter = new SettingsAdapter();
+		bitmapAdapter = new BitmapAdapter();
 		
 		pb = (ProgressBar)rootView.findViewById(R.id.playprogress);
 		kanmusuSpinner = (Spinner)rootView.findViewById(R.id.kanmususpinner);
@@ -159,6 +169,10 @@ public class ViewerFragment extends Fragment {
 			SettingsAdapter.shuffle_action = 3;										
 			settingsAdapter.shuffleRingtone(context);
 	        return true;
+	    case R.id.action_setsecretary:
+	    	SettingsAdapter.secretary_kanmusu = currentKanmusu;
+	    	Toast.makeText(context, context.getResources().getString(R.string.secretaryset), Toast.LENGTH_SHORT).show();
+	    	return true;
 	    default:
 	        break;
 	    }
@@ -299,16 +313,13 @@ public class ViewerFragment extends Fragment {
 		String filepath = currentDir + "/Image/" + imageList.get(currentImg);
 		File checkfile = new File(filepath);
 		if (checkfile.exists()) {
-			Bitmap playerBitmap = BitmapFactory.decodeFile(filepath);
-			playerImage.setImageBitmap(playerBitmap);
+			bitmapAdapter.loadBitmap(filepath, playerImage);
 			
 			filepath = currentDir + "/Image/" + imageList.get(checkImageLeft(currentImg));
-			Bitmap leftBitmap = BitmapFactory.decodeFile(filepath);
-			leftImage.setImageBitmap(leftBitmap);
+			bitmapAdapter.loadBitmap(filepath, leftImage);
 			
 			filepath = currentDir + "/Image/" + imageList.get(checkImageRight(currentImg));
-			Bitmap rightBitmap = BitmapFactory.decodeFile(filepath);
-			rightImage.setImageBitmap(rightBitmap);
+			bitmapAdapter.loadBitmap(filepath, rightImage);
 		}
 	}
 	
@@ -347,27 +358,26 @@ public class ViewerFragment extends Fragment {
 			View dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_image, (ViewGroup)context.findViewById(R.id.dialogImageLayout), false);
 			ImageView dialogImage = (ImageView)dialogView.findViewById(R.id.dialogImage);
 			
-			BitmapFactory.Options options = new BitmapFactory.Options();
+			// I remove the file check here because I should hope the file does not get deleted between being displayed and enlarged			
 			String filepath = currentDir + "/Image/" + imageList.get(currentImg);
-			File checkfile = new File(filepath);
-			if (checkfile.exists()) {
-				Bitmap bitmap = BitmapFactory.decodeFile(filepath, options);
-				dialogImage.setImageBitmap(bitmap);
-			}
+			Bitmap bitmap = bitmapAdapter.getBitmap(filepath);
+			dialogImage.setImageBitmap(bitmap);
+		
 			imageDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
 			imageDialog.setContentView(dialogView);
 			
 			// Scaling the popup image to fit the screen
 			// I hope there is a simpler way to do this, but I cant think of it so here we are
+			// I still hope there is a simpler way of doing this
 			View content = context.findViewById(Window.ID_ANDROID_CONTENT);
 			float displayWidth = content.getWidth() - 8;
 			float displayHeight = content.getHeight() - 8;
-			float widthRatio = (float) options.outWidth / (float) options.outHeight;
-			float heightRatio = (float) options.outHeight / (float)options.outWidth;			
+			float widthRatio = (float) bitmap.getWidth() / (float) bitmap.getHeight();
+			float heightRatio = (float) bitmap.getHeight() / (float) bitmap.getWidth();			
 			int ratioedWidth = (int) (displayHeight / heightRatio);
 			int ratioedHeight = (int) (displayWidth / widthRatio);
 						
-			if (displayWidth > options.outWidth && displayHeight > options.outHeight) {	
+			if (displayWidth > bitmap.getWidth() && displayHeight > bitmap.getHeight()) {	
 				ViewGroup.LayoutParams dialogParams = dialogView.getLayoutParams();	
 	
 				if (((Math.round(displayHeight / heightRatio)) > displayWidth && displayWidth > displayHeight) || ((Math.round(displayWidth / widthRatio)) < displayHeight) && displayWidth < displayHeight) {

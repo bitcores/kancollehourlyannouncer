@@ -1,5 +1,6 @@
 package net.bitcores.kancollehourlyannouncer;
 
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
@@ -129,7 +130,7 @@ public class SoundFragment extends Fragment {
 		settingsAdapter.doBackground(bgImage, bgText);
 		IntentFilter filter = new IntentFilter();
 		backgroundReceiver = new BackgroundReceiver();
-		filter.addAction(WidgetShare.UPDATE_WIDGET);
+		filter.addAction(WidgetProvider.UPDATE_WIDGET);
 		context.registerReceiver(backgroundReceiver, filter);
 	}
 	

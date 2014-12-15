@@ -1,18 +1,15 @@
 package net.bitcores.kancollehourlyannouncer;
 
-import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
-
-import net.bitcores.kancollehourlyannouncer.R;
-import net.bitcores.kancollehourlyannouncer.R.id;
-import net.bitcores.kancollehourlyannouncer.R.layout;
 
 import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
+import android.appwidget.AppWidgetProvider;
+import android.appwidget.AppWidgetProviderInfo;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -20,35 +17,49 @@ import android.os.Build;
 import android.os.Bundle;
 import android.widget.RemoteViews;
 
-public class WidgetShare {
+public class WidgetProvider extends AppWidgetProvider {
 	SettingsAdapter settingsAdapter;
 	BitmapAdapter bitmapAdapter;
-	RemoteViews widgetView;
 	
 	static final String UPDATE_WIDGET = "net.bitcores.kancollehourlyannouncer.UPDATE_WIDGET";
 	
-	public WidgetShare() {
+	@Override
+	public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
+		super.onUpdate(context, appWidgetManager, appWidgetIds);		
 		
+		sendUpdate(context, appWidgetManager, appWidgetIds);
 	}
-
-	@SuppressLint("InlinedApi")
-	public void updateWidget(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds, RemoteViews rwidgetView, String size) {	
-		settingsAdapter = new SettingsAdapter();
-		widgetView = rwidgetView;
 		
-		if (!SettingsAdapter.init) {
-			settingsAdapter.initSettings(context);
+	@Override
+	public void onAppWidgetOptionsChanged(Context context, AppWidgetManager appWidgetManager, int appWidgetId, Bundle newOptions) {
+		int[] appWidgetIds = new int[1];
+		appWidgetIds[0] = appWidgetId;
+
+		sendUpdate(context, appWidgetManager, appWidgetIds);
+	}
+	
+	@SuppressLint("InlinedApi")
+	public void sendUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
+		//	Seeing this can be called by onUpdate even if there are no applicable widgetids we jump out if there are none
+		if (appWidgetIds.length == 0) {
+			return;
 		}
 		
+		settingsAdapter = new SettingsAdapter();		
+		if (!SettingsAdapter.init) {
+			settingsAdapter.initSettings(context);
+		}	
 		bitmapAdapter = new BitmapAdapter();
 		bitmapAdapter.initBitmapCache();
 		
+		RemoteViews widgetView = null;
+				
 		//	UPDATE CLOCK
 		Calendar cal = Calendar.getInstance();
 		SimpleDateFormat f = new SimpleDateFormat("HH:mm", Locale.US);
 		String currentTime = f.format(cal.getTimeInMillis());
 		
-		if (Calendar.MINUTE != 59 && SettingsAdapter.enabled == 1) {
+		if (SettingsAdapter.enabled == 0 || (Calendar.MINUTE != 59 && SettingsAdapter.enabled == 1)) {
 			cal.add(Calendar.MINUTE, 1);
 			cal.set(Calendar.SECOND, 0);
 			cal.set(Calendar.MILLISECOND, 0);
@@ -69,24 +80,43 @@ public class WidgetShare {
 		Intent clockIntent = new Intent(context, MainActivity.class);
 		PendingIntent pclockIntent = PendingIntent.getActivity(context, 49494, clockIntent, 0);
 			
-		
-		for (int appWidgetId : appWidgetIds) {			
-			//	SET BACKGROUND IMAGE AND SECRETARY INTENT
+		for (int appWidgetId : appWidgetIds) {
+			AppWidgetProviderInfo appWidgetProviderInfo = appWidgetManager.getAppWidgetInfo(appWidgetId);
+			String label = appWidgetProviderInfo.label;
+			
+			switch (label) {
+				case "Kancolle Clock Medium":
+					widgetView = new RemoteViews(context.getPackageName(), R.layout.widget_clockmedium);
+					break;
+				case "Kancolle Clock Large":
+					widgetView = new RemoteViews(context.getPackageName(), R.layout.widget_clocklarge);
+					break;
+				case "Kancolle Clock Medium Large":
+					widgetView = new RemoteViews(context.getPackageName(), R.layout.widget_clockmediumlarge);
+					break;
+				case "Kancolle Secretary":
+					widgetView = new RemoteViews(context.getPackageName(), R.layout.widget_secretary);
+					break;
+				default: 
+					widgetView = null;
+					break;
+			}
+			
 			if (SettingsAdapter.kanmusu_use.size() > 0) {
-				String kanmusu = settingsAdapter.getKanmusu();
-				String filepath = SettingsAdapter.kancolle_dir + "/" + kanmusu + "/Image/image 21.png";
-				if (size.equals("secretary")) {
-					filepath = SettingsAdapter.kancolle_dir + "/" + kanmusu + "/Image/image 17.png";
+				String filepath = null;
+				if (label.equals("Kancolle Secretary")) {
+					filepath = settingsAdapter.getSecretary("bg", "widget");
+				} else {
+					filepath = settingsAdapter.getSecretary("widget", "widget");
 				}
-				File checkfile = new File(filepath);
-				if (checkfile.exists()) {
+				if (filepath != null) {
 					Bitmap cropped = null;
 					Bitmap bitmap = bitmapAdapter.getBitmap(filepath);
 					int width = bitmap.getWidth();
 					int height = bitmap.getHeight();
 									
-					if (size.equals("ml") || size.equals("r")) {
-						if (size.equals("ml")) {
+					if (label.equals("Kancolle Clock Medium Large") || label.equals("Kancolle Clock Resizeable")) {
+						if (label.equals("Kancolle Clock Medium Large")) {
 							width = 398;
 							cropped = Bitmap.createBitmap(bitmap, 0, 0, width, height);						
 						} else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
@@ -108,7 +138,7 @@ public class WidgetShare {
 									width = 600;
 								}
 								widgetView = new RemoteViews(context.getPackageName(), R.layout.widget_clockresizablem);
-
+	
 								cropped = Bitmap.createBitmap(bitmap, 0, 0, width, height);
 							} else {
 								width = 1099;
@@ -133,21 +163,23 @@ public class WidgetShare {
 					} else {
 						widgetView.setImageViewBitmap(R.id.clockBack, bitmap);
 					}
-					
-					widgetView.setTextViewText(R.id.clockText, currentTime);
-					
-					
+				
 					Intent secretaryIntent = new Intent(context, AnnounceService.class);
 					secretaryIntent.putExtra("TYPE", "secretary");
 					PendingIntent psecretaryIntent = PendingIntent.getService(context, 50505, secretaryIntent, 0);
 					
-					//	SET INTENTS
-					widgetView.setOnClickPendingIntent(R.id.clockBack, psecretaryIntent);
-					widgetView.setOnClickPendingIntent(R.id.clockText, pclockIntent);
+					//	SETUP SECRETARY
+					widgetView.setOnClickPendingIntent(R.id.clockBack, psecretaryIntent);				
 				}	
 			}
-		
+			
+			//	SETUP CLOCK
+			widgetView.setTextViewText(R.id.clockText, currentTime);	
+			widgetView.setOnClickPendingIntent(R.id.clockText, pclockIntent);
+
 			appWidgetManager.updateAppWidget(appWidgetId, widgetView);
 		}
+		
 	}
+	
 }

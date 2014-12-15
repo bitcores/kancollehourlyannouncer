@@ -2,6 +2,7 @@ package net.bitcores.kancollehourlyannouncer;
 
 import java.io.File;
 
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
@@ -10,6 +11,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
@@ -41,6 +43,7 @@ public class KanmusuFragment extends Fragment {
 	private static TextView shuffleViewerText;	
 	private static TextView dirView;
 	private static TextView foundView;
+	private static TextView clipsView;
 	private static TextView useView;
 	private static TextView announceStatus;
 	private static TextView bgText;
@@ -55,10 +58,18 @@ public class KanmusuFragment extends Fragment {
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		setHasOptionsMenu(false);
-		rootView = inflater.inflate(R.layout.fragment_kanmusu, container, false);
+		setHasOptionsMenu(false);		
 		
-		context = getActivity();	
+		Integer layout = null;
+		if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+			layout = R.layout.fragment_kanmusu_land;
+		} else {
+			layout = R.layout.fragment_kanmusu;
+		}
+		
+		rootView = inflater.inflate(layout, container, false);
+		
+		context = getActivity();
 		alarmAdapter = new AlarmAdapter();
 		settingsAdapter = new SettingsAdapter();
 		preferences = context.getSharedPreferences(SettingsAdapter.PREF_FILE_NAME, Context.MODE_PRIVATE);
@@ -71,6 +82,7 @@ public class KanmusuFragment extends Fragment {
 		announceStatus = (TextView)rootView.findViewById(R.id.announceStatus);	
 		dirView = (TextView)rootView.findViewById(R.id.dirText);
 		foundView = (TextView)rootView.findViewById(R.id.foundText);
+		clipsView = (TextView)rootView.findViewById(R.id.clipsText);
 		useView = (TextView)rootView.findViewById(R.id.useText);
 		bgText = (TextView)rootView.findViewById(R.id.kanmusuBgText);
 		bgImage = (ImageView)rootView.findViewById(R.id.kanmusuBgImage);	
@@ -267,7 +279,7 @@ public class KanmusuFragment extends Fragment {
 		settingsAdapter.doBackground(bgImage, bgText);
 		IntentFilter filter = new IntentFilter();	
 		backgroundReceiver = new BackgroundReceiver();
-		filter.addAction(WidgetShare.UPDATE_WIDGET);
+		filter.addAction(WidgetProvider.UPDATE_WIDGET);
 		context.registerReceiver(backgroundReceiver, filter);
 	}
 	
@@ -280,7 +292,8 @@ public class KanmusuFragment extends Fragment {
 	}
 	
 	private void updateTexts() {
-		String fvt = String.valueOf(SettingsAdapter.kanmusu_list.size()) + " " + getResources().getString(R.string.kanmusu);
+		String fvt = String.valueOf(SettingsAdapter.full_list.size()) + " " + getResources().getString(R.string.kanmusu);
+		String cvt = String.valueOf(SettingsAdapter.kanmusu_list.size()) + " " + getResources().getString(R.string.kanmusu);
 		String uvt = String.valueOf(SettingsAdapter.kanmusu_use.size()) + " " + getResources().getString(R.string.kanmusu);
 		String ast;
 		if (SettingsAdapter.enabled == 0) {
@@ -290,6 +303,7 @@ public class KanmusuFragment extends Fragment {
 		}
 		
 		foundView.setText(fvt);
+		clipsView.setText(cvt);
 		useView.setText(uvt);
 		announceStatus.setText(ast);
 		shuffleViewerText.setText(SettingsAdapter.viewer_kanmusu);

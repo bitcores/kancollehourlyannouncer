@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="net.bitcores.kancollehourlyannouncer"
     android:versionCode="1"
-    android:versionName="1.2.0" >
+    android:versionName="1.2.1a" >
 
     <uses-sdk
         android:minSdkVersion="14"
@@ -53,7 +53,7 @@
         <receiver
             android:icon="@drawable/ic_launcher"
             android:label="Kancolle Clock Medium"
-            android:name=".WidgetMProvider" >
+            android:name=".WidgetMedium" >
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
                 <action android:name="net.bitcores.kancollehourlyannouncer.UPDATE_WIDGET" />
@@ -66,7 +66,7 @@
         <receiver
             android:icon="@drawable/ic_launcher"
             android:label="Kancolle Clock Large"
-            android:name=".WidgetLProvider" >
+            android:name=".WidgetLarge" >
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
                 <action android:name="net.bitcores.kancollehourlyannouncer.UPDATE_WIDGET" />
@@ -79,7 +79,7 @@
         <receiver
             android:icon="@drawable/ic_launcher"
             android:label="Kancolle Clock Medium Large"
-            android:name=".WidgetMLProvider" >
+            android:name=".WidgetMediumLarge" >
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
                 <action android:name="net.bitcores.kancollehourlyannouncer.UPDATE_WIDGET" />
@@ -92,7 +92,7 @@
         <receiver
             android:icon="@drawable/ic_launcher"
             android:label="Kancolle Clock Resizable"
-            android:name=".WidgetRProvider"
+            android:name=".WidgetResizable"
             android:enabled="@bool/is_post_api_16" >
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -103,6 +103,21 @@
         	    android:resource="@xml/widgetresizable_info" 
         	/>
         </receiver>
+        <receiver
+            android:icon="@drawable/ic_launcher"
+            android:label="Kancolle Secretary"
+            android:name=".WidgetSecretary"
+            android:enabled="@bool/is_post_api_16" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="net.bitcores.kancollehourlyannouncer.UPDATE_WIDGET" />
+        	</intent-filter>
+        	<meta-data
+        	    android:name="android.appwidget.provider"
+        	    android:resource="@xml/widgetsecretary_info" 
+        	/>
+        </receiver>
+            
     </application>
 
 </manifest>

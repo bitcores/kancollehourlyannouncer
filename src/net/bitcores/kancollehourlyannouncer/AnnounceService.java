@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.Calendar;
 import java.util.Random;
 
+
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -84,7 +85,7 @@ public class AnnounceService extends Service {
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			Intent broadcastIntent = new Intent();
-			broadcastIntent.setAction(WidgetShare.UPDATE_WIDGET);
+			broadcastIntent.setAction(WidgetProvider.UPDATE_WIDGET);
 			broadcastIntent.putExtra("placeholder", "data");
 			sendBroadcast(broadcastIntent);
 		}
@@ -99,7 +100,12 @@ public class AnnounceService extends Service {
 			String[] sArray = new String[] { "2.mp3", "3.mp3", "4.mp3", "28.mp3" };
 			Random r = new Random();
 			int rand = r.nextInt(4);		
-			String kanmusu = settingsAdapter.getKanmusu();
+			String kanmusu = "";
+			if (SettingsAdapter.secretary_widget == 0 || SettingsAdapter.secretary_kanmusu == "") {
+				kanmusu = settingsAdapter.getKanmusu();
+			} else {
+				kanmusu = SettingsAdapter.secretary_kanmusu;
+			}
 			filePath = SettingsAdapter.kancolle_dir + "/" + kanmusu + "/" + sArray[rand];
 			checkFile = new File(filePath);
 			if (!checkFile.exists()) {
@@ -160,11 +166,11 @@ public class AnnounceService extends Service {
 					alarmAdapter.setAlarm(AnnounceService.this);
 					
 					// Tell widgets to update
-					Intent broadcastIntent = new Intent();
-					broadcastIntent.setAction(WidgetShare.UPDATE_WIDGET);
-					sendBroadcast(broadcastIntent);
+					settingsAdapter.updateWidgets(AnnounceService.this);
+					// Write the log on announcement too
+					settingsAdapter.writeLog(AnnounceService.this);
 				}
-			} 
+			}		
 		} 
 	}
 }

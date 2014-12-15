@@ -28,24 +28,16 @@
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
 	    android:layout_marginLeft="5dp"
-	    android:layout_below="@+id/kanmususpinner" />
-    
-    <ProgressBar
-	    android:id="@+id/playprogress"
-	    style="?android:attr/progressBarStyleHorizontal"
-	    android:layout_width="220dp"
-	    android:layout_height="10dp"
-	    android:layout_alignLeft="@+id/kanmusutitle"
-	    android:layout_below="@+id/msgbox" />
+	    android:layout_below="@+id/kanmususpinner" />  
         
     <TextView 
         android:id="@+id/cliptitle"
         style="@style/titletext"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignLeft="@+id/playerspinner"
-        android:layout_marginRight="5dp"
+        android:layout_below="@+id/msgbox"
+        android:layout_alignLeft="@+id/kanmusutitle"
+        android:layout_marginTop="30dp"
         android:text="@string/soundclips" />
     
     <Spinner
@@ -53,8 +45,8 @@
         style="@style/medtext"
         android:layout_width="220dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
         android:layout_below="@+id/cliptitle"
+        android:layout_alignLeft="@+id/cliptitle"
         android:spinnerMode="dialog" />
     
     <Button
@@ -62,11 +54,13 @@
         style="@style/hugebutton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/playerspinner"
         android:layout_toLeftOf="@+id/stopbutton"
         android:layout_alignLeft="@+id/playerspinner"
         android:layout_alignBottom="@+id/stopbutton"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="25dp"
+        android:layout_marginTop="5dp"
         android:text="@string/play" />
     
     <Button
@@ -78,14 +72,25 @@
         android:layout_alignRight="@+id/playerspinner"
         android:layout_marginLeft="25dp"
         android:layout_marginRight="20dp"
+        android:layout_marginTop="5dp"
         android:text="@string/stop" />
+    
+    <ProgressBar
+	    android:id="@+id/playprogress"
+	    style="?android:attr/progressBarStyleHorizontal"
+	    android:layout_width="220dp"
+	    android:layout_height="10dp"
+	    android:layout_alignLeft="@+id/cliptitle"
+	    android:layout_below="@+id/playbutton"
+	    android:layout_marginTop="10dp" />
     
 	<RelativeLayout
 	    android:id="@+id/imagelayout"
 	    android:layout_width="match_parent"
 	    android:layout_height="fill_parent"
 	    android:layout_alignParentBottom="true"
-	    android:layout_below="@+id/stopbutton" >
+	    android:layout_toRightOf="@+id/playprogress"
+	    android:layout_marginLeft="10dp" >
 	    
 	    <ImageView 
 	        android:id="@+id/leftimage"

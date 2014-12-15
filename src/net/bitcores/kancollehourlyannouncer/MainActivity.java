@@ -17,6 +17,7 @@ import android.content.res.Configuration;
 public class MainActivity extends Activity {
 	private AlarmAdapter alarmAdapter;
 	private SettingsAdapter settingsAdapter;
+	private BitmapAdapter bitmapAdapter;
 	private DrawerLayout mDrawerLayout;
 	private RelativeLayout mDrawerList;
 	private ListView mTop;
@@ -39,6 +40,7 @@ public class MainActivity extends Activity {
 		if (!SettingsAdapter.init) {
 			settingsAdapter.initSettings(MainActivity.this);
 		}
+		bitmapAdapter = new BitmapAdapter();
 				
 		setContentView(R.layout.activity_main);
 		
@@ -83,6 +85,8 @@ public class MainActivity extends Activity {
             if (SettingsAdapter.enabled == 1) {
     			alarmAdapter.setAlarm(MainActivity.this);
     		}
+            
+            bitmapAdapter.initBitmapCache();
         }
 	}
 	
@@ -146,8 +150,10 @@ public class MainActivity extends Activity {
 			case 0:
 				return new KanmusuFragment();
 			case 1:
-				return new SoundFragment();	
+				return new SoundFragment();
 			case 2:
+				return new SecretaryFragment();
+			case 3:
 				return new ViewerFragment();
 			}
 		} else if (view.getId() == R.id.bottom_menu) {

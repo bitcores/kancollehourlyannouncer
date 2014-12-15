@@ -20,10 +20,9 @@ import java.util.Set;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.provider.MediaStore;
@@ -33,11 +32,10 @@ import android.widget.TextView;
 
 public class SettingsAdapter {
 	private SharedPreferences preferences;
-	private static final String LOG_FILE_NAME = "eventlog.txt";
+	private static final String LOG_FILE_NAME = "eventlog.txt";	
 	
 	public static final String PREF_FILE_NAME = "settings";
-	public static Boolean init = false;
-	public static String kancolle_dir = "";
+	public static Boolean init = false;	
 	public static Integer enabled = 0;
 	public static Integer use_volume = 0;
 	public static Integer call_action = 0;
@@ -49,8 +47,14 @@ public class SettingsAdapter {
 	public static Integer shuffle_action = 0;
 	public static Integer enable_log = 0;
 	public static Integer verbose_log = 0;
+	public static Integer secretary_bg = 0;
+	public static Integer secretary_bgimgtype = 0;
+	public static Integer secretary_widget = 0;
+	public static Integer secretary_widgetimgtype = 0;
+	public static String kancolle_dir = "";
 	public static String hourly_kanmusu = "";
 	public static String viewer_kanmusu = "";
+	public static String secretary_kanmusu = "";
 	public static List<String> full_list = new ArrayList<String>();
 	public static List<String> kanmusu_list = new ArrayList<String>();
 	public static List<String> kanmusu_select = new ArrayList<String>();
@@ -86,8 +90,13 @@ public class SettingsAdapter {
 		shuffle_action = preferences.getInt("shuffle_action", 0);
 		enable_log = preferences.getInt("enable_log", 0);
 		verbose_log = preferences.getInt("verbose_log", 0);
+		secretary_bg = preferences.getInt("secretary_bg", 0);
+		secretary_bgimgtype = preferences.getInt("secretary_bgimgtype", 0);
+		secretary_widget = preferences.getInt("secretary_widget", 0);
+		secretary_widgetimgtype = preferences.getInt("secretary_widgetimgtype", 0);
 		hourly_kanmusu = preferences.getString("hourly_kanmusu", "");
 		viewer_kanmusu = preferences.getString("viewer_kanmusu", "");
+		secretary_kanmusu = preferences.getString("secretary_kanmusu", "");
 		
 		Set<String> full = new HashSet<String>();
 		full = preferences.getStringSet("full_list", null);
@@ -130,11 +139,9 @@ public class SettingsAdapter {
 			br.close();
 			
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			e.printStackTrace();
 		}
 		
 		init = true;
@@ -155,9 +162,14 @@ public class SettingsAdapter {
 		editor.putInt("use_shuffle", use_shuffle);
 		editor.putInt("shuffle_action", shuffle_action);
 		editor.putInt("enable_log", enable_log);
-		editor.putInt("verbose_log", verbose_log);		
+		editor.putInt("verbose_log", verbose_log);
+		editor.putInt("secretary_bg", secretary_bg);
+		editor.putInt("secretary_bgimgtype", secretary_bgimgtype);
+		editor.putInt("secretary_widget", secretary_widget);
+		editor.putInt("secretary_widgetimgtype", secretary_widgetimgtype);
 		editor.putString("hourly_kanmusu", hourly_kanmusu);
 		editor.putString("viewer_kanmusu", viewer_kanmusu);
+		editor.putString("secretary_kanmusu", secretary_kanmusu);
 		
 		Set<String> full_set = new HashSet<String>();
 		full_set.addAll(full_list);
@@ -189,6 +201,7 @@ public class SettingsAdapter {
 	}
 	
 	public String getKanmusu() {
+		
 		if (hourly_kanmusu.equals("")) {
 			int rand = 0;
 			if (kanmusu_use.size() > 1) {
@@ -200,6 +213,68 @@ public class SettingsAdapter {
 		} 
 		
 		return hourly_kanmusu;
+	}
+	
+	public String getSecretary(String type, String app) {
+		class local {
+			public List<String> img(String[] array, String kanmusu) {
+				List<String> imgList = new ArrayList<String>();
+				for (String filename : array) {
+					String filepath = kancolle_dir + "/" + kanmusu + "/Image/" + filename;
+					File checkfile = new File(filepath);
+					if (checkfile.exists()) {
+						imgList.add(filename);
+					}
+				}
+				
+				return imgList;
+			}
+		}
+		
+		// The Arpeggio event characters didn't include an image 17.png but instead had a 16 and 18 that were usually combined to fill the place of 17
+		// we use 16 if 17 isn't present
+		final String[] bgImgs = new String[] { "image 17.png", "image 19.png", "image 16.png", "image 18.png" };
+		final String[] widgetImgs = new String[] { "image 21.png", "image 23.png" };
+		List<String> availImgs = new ArrayList<String>();
+		String kanmusu = "";	
+		local parseImgs = new local();
+
+		if (app.equals("bg")) {
+			if (secretary_bg == 1 && !secretary_kanmusu.equals("")) {
+				kanmusu = secretary_kanmusu;
+			} else {
+				kanmusu = getKanmusu();
+			}		
+		} else if (app.equals("widget")) {
+			if (secretary_widget == 1 && !secretary_kanmusu.equals("")) {
+				kanmusu = secretary_kanmusu;
+			} else {
+				kanmusu = getKanmusu();
+			}			
+		}
+		
+		if (type.equals("bg")) {
+			availImgs = parseImgs.img(bgImgs, kanmusu);
+		} else if (type.equals("widget")) {
+			availImgs = parseImgs.img(widgetImgs, kanmusu);
+		}
+		
+		if (availImgs.size() == 0) {
+			logEvent("No images found for " + kanmusu, 0);
+			return null;
+		} else if (availImgs.size() == 1) {
+			return kancolle_dir + "/" + kanmusu + "/Image/" + availImgs.get(0);
+		} else if (availImgs.size() == 2) {		
+			if (app.equals("bg")) {
+				return kancolle_dir + "/" + kanmusu + "/Image/" + availImgs.get(secretary_bgimgtype);		
+			} else if (app.equals("widget")) {
+				return kancolle_dir + "/" + kanmusu + "/Image/" + availImgs.get(secretary_widgetimgtype);	
+			} else {
+				return null;
+			}
+		}
+				
+		return null;
 	}
 	
 	public void setRingtone(Context context, String filepath, String name, Integer num) {
@@ -282,36 +357,28 @@ public class SettingsAdapter {
 		}
 	}
 	
+	public void updateWidgets(Context context) {
+		Intent broadcastIntent = new Intent();
+		broadcastIntent.setAction(WidgetProvider.UPDATE_WIDGET);
+		context.sendBroadcast(broadcastIntent);
+	}
+	
 	public void doBackground(ImageView bgImage, TextView bgText) {
-		if (kanmusu_use.size() > 0) {
-			String kanmusu = getKanmusu();
-			
-			//	Don't update if the kanmusu is the same as the current one
-			if (bgText.getText().toString().equals(kanmusu)) {
-				return;
-			}
-			
-			// The Arpeggio event characters didn't include an image 17.png but instead had a 16 and 18 that were usually combined to fill the place of 17
-			// we use 16 if 17 isn't present
+		BitmapAdapter bitmapAdapter = new BitmapAdapter();
 
-			boolean exist = false;
-			String filepath = kancolle_dir + "/" + kanmusu + "/Image/image 17.png";
-			File checkfile = new File(filepath);
-			if (checkfile.exists()) {
-				exist = true;
+		if (kanmusu_use.size() > 0) {
+			String kanmusu = "";
+			if (secretary_bg == 0 || secretary_kanmusu == "") {
+				kanmusu = getKanmusu();
 			} else {
-				filepath = kancolle_dir + "/" + kanmusu + "/Image/image 16.png";
-				checkfile = new File(filepath);				
-				if (checkfile.exists()) {
-					exist = true;
-				}
+				kanmusu = secretary_kanmusu;
 			}
-			
-			if (exist) {
-				Bitmap bitmap = BitmapFactory.decodeFile(filepath);
-				bgImage.setImageBitmap(bitmap);
-				bgText.setText(kanmusu);
-			}			
+						
+			String filepath = getSecretary("bg", "bg");
+			if (filepath != null) {
+				bitmapAdapter.loadBitmap(filepath, bgImage);
+			}
+			bgText.setText(kanmusu);	
 		}
 	}
 	
@@ -348,7 +415,6 @@ public class SettingsAdapter {
 			logEvent("Eventlog: Log file could not be created. Please reinstall the app to fix.", 0);
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO
 			e.printStackTrace();
 		}
 	}
