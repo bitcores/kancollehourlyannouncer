@@ -9,8 +9,10 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -24,7 +26,6 @@ public class SecretaryFragment extends Fragment {
 	private static View rootView;
 	private static TextView bgText;
 	private static ImageView bgImage;
-
 	
 	public SecretaryFragment() {
 		
@@ -39,10 +40,12 @@ public class SecretaryFragment extends Fragment {
 		settingsAdapter = new SettingsAdapter();
 		
 		TextView secretaryUseText = (TextView)rootView.findViewById(R.id.secretaryUseText);
+		CheckBox playidlebootCheckBox = (CheckBox)rootView.findViewById(R.id.playidlebootCheckBox);
 		Spinner bgusesecretarySpinner = (Spinner)rootView.findViewById(R.id.bgusesecretarySpinner);
 		Spinner bgusetypeSpinner = (Spinner)rootView.findViewById(R.id.bgusetypeSpinner);
 		Spinner widgetusesecretarySpinner = (Spinner)rootView.findViewById(R.id.widgetusesecretarySpinner);
 		Spinner widgetusetypeSpinner = (Spinner)rootView.findViewById(R.id.widgetusetypeSpinner);
+		Spinner idletypeSpinner = (Spinner)rootView.findViewById(R.id.idletypeSpinner);
 		bgText = (TextView)rootView.findViewById(R.id.settingsBgText);
 		bgImage = (ImageView)rootView.findViewById(R.id.settingsBgImage);
 		
@@ -59,6 +62,24 @@ public class SecretaryFragment extends Fragment {
 		
 		widgetusetypeSpinner.setSelection(SettingsAdapter.secretary_widgetimgtype);
 		widgetusetypeSpinner.setOnItemSelectedListener(spinnerListener);
+		
+		if (SettingsAdapter.boot_idle == 1) {
+			playidlebootCheckBox.setChecked(true);
+		}
+		playidlebootCheckBox.setOnClickListener(new OnClickListener(){
+			@Override
+			public void onClick(View view) {
+				CheckBox v = (CheckBox)view;
+				if(v.isChecked()) {
+					SettingsAdapter.boot_idle = 1;
+				} else {
+					SettingsAdapter.boot_idle = 0;
+				}
+			}			
+		});
+		
+		idletypeSpinner.setSelection(SettingsAdapter.secretary_idle);
+		idletypeSpinner.setOnItemSelectedListener(spinnerListener);
 		
 		settingsAdapter.doBackground(bgImage, bgText);
 		
@@ -83,6 +104,8 @@ public class SecretaryFragment extends Fragment {
 				case R.id.widgetusetypeSpinner:
 					SettingsAdapter.secretary_widgetimgtype = position;
 					break;
+				case R.id.idletypeSpinner:
+					SettingsAdapter.secretary_idle = position;
 				default:
 					return;
 			}

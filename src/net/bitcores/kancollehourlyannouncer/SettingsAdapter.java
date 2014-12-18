@@ -51,6 +51,8 @@ public class SettingsAdapter {
 	public static Integer secretary_bgimgtype = 0;
 	public static Integer secretary_widget = 0;
 	public static Integer secretary_widgetimgtype = 0;
+	public static Integer boot_idle = 0;
+	public static Integer secretary_idle = 0;
 	public static String kancolle_dir = "";
 	public static String hourly_kanmusu = "";
 	public static String viewer_kanmusu = "";
@@ -94,6 +96,8 @@ public class SettingsAdapter {
 		secretary_bgimgtype = preferences.getInt("secretary_bgimgtype", 0);
 		secretary_widget = preferences.getInt("secretary_widget", 0);
 		secretary_widgetimgtype = preferences.getInt("secretary_widgetimgtype", 0);
+		boot_idle = preferences.getInt("boot_idle", 0);
+		secretary_idle = preferences.getInt("secretary_idle", 0);
 		hourly_kanmusu = preferences.getString("hourly_kanmusu", "");
 		viewer_kanmusu = preferences.getString("viewer_kanmusu", "");
 		secretary_kanmusu = preferences.getString("secretary_kanmusu", "");
@@ -167,6 +171,8 @@ public class SettingsAdapter {
 		editor.putInt("secretary_bgimgtype", secretary_bgimgtype);
 		editor.putInt("secretary_widget", secretary_widget);
 		editor.putInt("secretary_widgetimgtype", secretary_widgetimgtype);
+		editor.putInt("boot_idle", boot_idle);
+		editor.putInt("secretary_idle", secretary_idle);
 		editor.putString("hourly_kanmusu", hourly_kanmusu);
 		editor.putString("viewer_kanmusu", viewer_kanmusu);
 		editor.putString("secretary_kanmusu", secretary_kanmusu);

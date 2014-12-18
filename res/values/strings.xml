@@ -72,6 +72,7 @@
 	<string name="imgselectspinner">Select Secretary Kanmusu</string>
 	<string name="imgtypespinner">Select Image Type</string>
 	<string name="secretaryset">Kanmusu Secretary Set</string>
+	<string name="playidletext">Play idle line on device boot</string>
     
 
 </resources>

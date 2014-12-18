@@ -115,7 +115,7 @@ public class AnnounceService extends Service {
 			
 			//	I do not believe I need to test the results of the playAudio in this service because errors are handled in the adapter
 			audioAdapter.playAudio(AnnounceService.this, type, 0, clipUri, filePath);
-		}  else if (type.equals("announce")) {
+		} else if (type.equals("announce")) {
 			alarmAdapter = new AlarmAdapter();
 			
 			if (SettingsAdapter.enabled == 1) {
