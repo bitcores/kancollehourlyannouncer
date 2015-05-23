@@ -184,9 +184,12 @@ public final class R {
         public static final int kanmusulist=0x7f08003b;
         public static final int logenabletitle=0x7f08003e;
         public static final int logverbosetitle=0x7f08003f;
+        public static final int lrgwidgettitle=0x7f080049;
         public static final int mediaspinner=0x7f080015;
         public static final int mediaspinnertitle=0x7f08000e;
+        public static final int medwidgettitle=0x7f080048;
         public static final int minutefill=0x7f080022;
+        public static final int mlwidgettitle=0x7f08004a;
         public static final int notset=0x7f080037;
         public static final int numclipstitle=0x7f080030;
         public static final int numfoundtitle=0x7f08002f;
@@ -197,6 +200,7 @@ public final class R {
         public static final int quiethours=0x7f080010;
         public static final int quietvolume=0x7f080013;
         public static final int refreshtitle=0x7f08003d;
+        public static final int reswidgettitle=0x7f08004b;
         public static final int rowfill=0x7f080024;
         public static final int rowstitle=0x7f080026;
         public static final int rtoneset=0x7f08001b;
@@ -211,6 +215,7 @@ public final class R {
         public static final int scandir=0x7f080006;
         public static final int secretarykantext=0x7f080041;
         public static final int secretaryset=0x7f080046;
+        public static final int secwidgettitle=0x7f08004c;
         public static final int selectall=0x7f080008;
         public static final int setsecretary=0x7f080040;
         public static final int shuffleclipselectiontext=0x7f08002b;

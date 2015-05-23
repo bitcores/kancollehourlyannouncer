@@ -73,6 +73,11 @@
 	<string name="imgtypespinner">Select Image Type</string>
 	<string name="secretaryset">Kanmusu Secretary Set</string>
 	<string name="playidletext">Play idle line on device boot</string>
+	<string name="medwidgettitle">Kancolle Clock Medium</string>
+	<string name="lrgwidgettitle">Kancolle Clock Large</string>
+	<string name="mlwidgettitle">Kancolle Clock Medium Large</string>
+	<string name="reswidgettitle">Kancolle Clock Resizable</string>
+	<string name="secwidgettitle">Kancolle Secretary</string>
     
 
 </resources>

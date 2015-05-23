@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="net.bitcores.kancollehourlyannouncer"
     android:versionCode="1"
-    android:versionName="1.2.1" >
+    android:versionName="1.2.3" >
 
     <uses-sdk
         android:minSdkVersion="14"
@@ -53,7 +53,7 @@
         </receiver>
         <receiver
             android:icon="@drawable/ic_launcher"
-            android:label="Kancolle Clock Medium"
+            android:label="@string/medwidgettitle"
             android:name=".WidgetMedium" >
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -66,7 +66,7 @@
         </receiver>
         <receiver
             android:icon="@drawable/ic_launcher"
-            android:label="Kancolle Clock Large"
+            android:label="@string/lrgwidgettitle"
             android:name=".WidgetLarge" >
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -79,7 +79,7 @@
         </receiver>
         <receiver
             android:icon="@drawable/ic_launcher"
-            android:label="Kancolle Clock Medium Large"
+            android:label="@string/mlwidgettitle"
             android:name=".WidgetMediumLarge" >
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -92,7 +92,7 @@
         </receiver>
         <receiver
             android:icon="@drawable/ic_launcher"
-            android:label="Kancolle Clock Resizable"
+            android:label="@string/reswidgettitle"
             android:name=".WidgetResizable"
             android:enabled="@bool/is_post_api_16" >
             <intent-filter>
@@ -106,7 +106,7 @@
         </receiver>
         <receiver
             android:icon="@drawable/ic_launcher"
-            android:label="Kancolle Secretary"
+            android:label="@string/secwidgettitle"
             android:name=".WidgetSecretary"
             android:enabled="@bool/is_post_api_16" >
             <intent-filter>

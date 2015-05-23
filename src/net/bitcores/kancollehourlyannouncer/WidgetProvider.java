@@ -45,6 +45,12 @@ public class WidgetProvider extends AppWidgetProvider {
 			return;
 		}
 		
+		final String WIDGET_MEDIUM = context.getResources().getString(R.string.medwidgettitle);
+		final String WIDGET_LARGE = context.getResources().getString(R.string.lrgwidgettitle);
+		final String WIDGET_MEDLRG = context.getResources().getString(R.string.mlwidgettitle);
+		final String WIDGET_RESIZE = context.getResources().getString(R.string.reswidgettitle);
+		final String WIDGET_SECRET = context.getResources().getString(R.string.secwidgettitle);
+		
 		settingsAdapter = new SettingsAdapter();		
 		if (!SettingsAdapter.init) {
 			settingsAdapter.initSettings(context);
@@ -84,27 +90,21 @@ public class WidgetProvider extends AppWidgetProvider {
 			AppWidgetProviderInfo appWidgetProviderInfo = appWidgetManager.getAppWidgetInfo(appWidgetId);
 			String label = appWidgetProviderInfo.label;
 			
-			switch (label) {
-				case "Kancolle Clock Medium":
-					widgetView = new RemoteViews(context.getPackageName(), R.layout.widget_clockmedium);
-					break;
-				case "Kancolle Clock Large":
-					widgetView = new RemoteViews(context.getPackageName(), R.layout.widget_clocklarge);
-					break;
-				case "Kancolle Clock Medium Large":
-					widgetView = new RemoteViews(context.getPackageName(), R.layout.widget_clockmediumlarge);
-					break;
-				case "Kancolle Secretary":
-					widgetView = new RemoteViews(context.getPackageName(), R.layout.widget_secretary);
-					break;
-				default: 
-					widgetView = null;
-					break;
+			if (WIDGET_MEDIUM.equals(label)) {
+				widgetView = new RemoteViews(context.getPackageName(), R.layout.widget_clockmedium);
+			} else if (WIDGET_LARGE.equals(label)) {
+				widgetView = new RemoteViews(context.getPackageName(), R.layout.widget_clocklarge);
+			} else if (WIDGET_MEDLRG.equals(label)) {
+				widgetView = new RemoteViews(context.getPackageName(), R.layout.widget_clockmediumlarge);
+			} else if (WIDGET_SECRET.equals(label)) {
+				widgetView = new RemoteViews(context.getPackageName(), R.layout.widget_secretary);
+			} else {
+				widgetView = null;
 			}
 			
 			if (SettingsAdapter.kanmusu_use.size() > 0) {
 				String filepath = null;
-				if (label.equals("Kancolle Secretary")) {
+				if (label.equals(WIDGET_SECRET)) {
 					filepath = settingsAdapter.getSecretary("bg", "widget");
 				} else {
 					filepath = settingsAdapter.getSecretary("widget", "widget");
@@ -115,8 +115,8 @@ public class WidgetProvider extends AppWidgetProvider {
 					int width = bitmap.getWidth();
 					int height = bitmap.getHeight();
 									
-					if (label.equals("Kancolle Clock Medium Large") || label.equals("Kancolle Clock Resizeable")) {
-						if (label.equals("Kancolle Clock Medium Large")) {
+					if (label.equals(WIDGET_MEDLRG) || label.equals(WIDGET_RESIZE)) {
+						if (label.equals(WIDGET_MEDLRG)) {
 							width = 398;
 							cropped = Bitmap.createBitmap(bitmap, 0, 0, width, height);						
 						} else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
