@@ -9,93 +9,87 @@
         style="@style/titletext"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"       
-	    android:layout_alignBottom="@+id/kanmususpinner"
-	    android:layout_marginBottom="8dp"
+        android:layout_alignParentTop="true"
         android:text="@string/kanmusulist" />
-    
+
     <Spinner
 	    android:id="@+id/kanmususpinner"
 	    style="@style/medtext"
-	    android:layout_width="140dp"
+	    android:layout_width="220dp"
 	    android:layout_height="wrap_content"
-	    android:layout_alignParentTop="true"
-	    android:layout_toRightOf="@+id/kanmusutitle"
-	    android:layout_toEndOf="@+id/kanmusutitle"
-	    android:layout_marginStart="10dp"
-	    android:layout_marginLeft="10dp"
+	    android:layout_alignLeft="@+id/kanmusutitle"
+	    android:layout_alignStart="@+id/kanmusutitle"
+	    android:layout_below="@+id/kanmusutitle"
 	    android:saveEnabled="false"
 	    android:spinnerMode="dialog" />
-    
-    <TextView
-	    android:id="@+id/cliptitle"
-	    style="@style/titletext"
-	    android:layout_width="wrap_content"
-	    android:layout_height="wrap_content"
-	    android:layout_alignParentStart="true"
-	    android:layout_alignParentLeft="true"
-	    android:layout_alignBottom="@+id/playerspinner"    
-	    android:layout_marginBottom="8dp"
-	    android:text="@string/soundclips" />
-    
-    <Spinner
-	    android:id="@+id/playerspinner"
-	    style="@style/medtext"
-	    android:layout_width="140dp"
-	    android:layout_height="wrap_content"
-	    android:layout_toRightOf="@+id/cliptitle"
-	    android:layout_toEndOf="@+id/cliptitle"
-	    android:layout_below="@+id/kanmususpinner"
-	    android:layout_marginStart="10dp"
-	    android:layout_marginLeft="10dp"
-	    android:spinnerMode="dialog" />
-        
-    <Button
-        android:id="@+id/playbutton"
-        style="@style/hugebutton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/cliptitle"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
-        android:text="@string/play" />
-    
-    <ProgressBar
-        android:id="@+id/playprogress"
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="fill_parent"
-        android:layout_height="10dp"
-        android:layout_alignBottom="@id/playbutton"
-        android:layout_toEndOf="@+id/playbutton"
-        android:layout_toRightOf="@+id/playbutton"
-        android:layout_marginBottom="20dp" />
     
     <TextView
 	    android:id="@+id/msgbox"
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
-	    android:layout_marginStart="5dp"
 	    android:layout_marginLeft="5dp"
-	    android:layout_below="@+id/playbutton" />
+	    android:layout_marginStart="5dp"
+	    android:layout_below="@+id/kanmususpinner" />
     
+    <ProgressBar
+	    android:id="@+id/playprogress"
+	    style="?android:attr/progressBarStyleHorizontal"
+	    android:layout_width="220dp"
+	    android:layout_height="10dp"
+	    android:layout_alignLeft="@+id/kanmusutitle"
+	    android:layout_alignStart="@+id/kanmusutitle"
+	    android:layout_below="@+id/msgbox" />
+        
+    <TextView 
+        android:id="@+id/cliptitle"
+        style="@style/titletext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignLeft="@+id/playerspinner"
+        android:layout_alignStart="@+id/playerspinner"
+        android:layout_marginRight="5dp"
+        android:layout_marginEnd="5dp"
+        android:text="@string/soundclips" />
+    
+    <Spinner
+        android:id="@+id/playerspinner"
+        style="@style/medtext"
+        android:layout_width="220dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/cliptitle"
+        android:spinnerMode="dialog" />
+    
+    <Button
+        android:id="@+id/playbutton"
+        style="@style/hugebutton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/playerspinner"
+        android:layout_alignStart="@+id/playerspinner"
+        android:layout_below="@+id/playerspinner"
+        android:layout_marginLeft="60dp"
+        android:layout_marginStart="60dp"
+        android:text="@string/play" />
+     
 	<RelativeLayout
 	    android:id="@+id/imagelayout"
 	    android:layout_width="match_parent"
 	    android:layout_height="fill_parent"
 	    android:layout_alignParentBottom="true"
-	    android:layout_below="@+id/msgbox" >
+	    android:layout_below="@+id/playbutton" >
 	    
 	    <ImageView 
 	        android:id="@+id/leftimage"
-	        android:layout_width="50dp"
+	        android:layout_width="75dp"
         	android:layout_height="fill_parent"
         	android:layout_centerVertical="true"
-        	android:layout_alignParentStart="true"
         	android:layout_alignParentLeft="true"
+        	android:layout_alignParentStart="true"
         	android:adjustViewBounds="true"
 	        android:scaleType="fitCenter"
         	android:contentDescription="@string/bgdesc" />
@@ -110,10 +104,10 @@
 	        android:layout_marginRight="10dp"
 	        android:layout_alignParentBottom="true"
 	        android:layout_centerHorizontal="true"
-	        android:layout_toEndOf="@+id/leftimage"
 	        android:layout_toRightOf="@+id/leftimage"
-	        android:layout_toStartOf="@+id/rightimage"  
+	        android:layout_toEndOf="@+id/leftimage"
 	        android:layout_toLeftOf="@+id/rightimage"        
+	        android:layout_toStartOf="@+id/rightimage"        
 	        android:adjustViewBounds="true"
 	        android:scaleType="fitCenter"
 	        android:contentDescription="@string/bgdesc"
@@ -121,16 +115,15 @@
 	    
 	    <ImageView 
 	        android:id="@+id/rightimage"
-	        android:layout_width="50dp"
+	        android:layout_width="75dp"
         	android:layout_height="fill_parent"
         	android:layout_centerVertical="true"
-        	android:layout_alignParentEnd="true"
         	android:layout_alignParentRight="true"
+        	android:layout_alignParentEnd="true"
 			android:adjustViewBounds="true"
 	        android:scaleType="fitCenter"
         	android:contentDescription="@string/bgdesc" />
    	
     </RelativeLayout>
-	
 
 </RelativeLayout>

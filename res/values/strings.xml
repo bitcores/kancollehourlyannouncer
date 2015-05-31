@@ -24,8 +24,8 @@
     <string name="savesettings">SAVE SETTINGS</string>
     <string name="mediaspinner">Choose Volume Type</string>
     <string name="callspinner">Choose Action</string>
-    <string name="viewererror1">Please rescan directory and \"save kanmusu\" to generate list</string>
-    <string name="viewererror2">Please choose directory, scan and \"save kanmusu\"</string>
+    <string name="viewererror1">Please rescan directory to generate list</string>
+    <string name="viewererror2">In the Kanmusu page, please choose directory and scan</string>
     <string name="useshuffle">Shuffle Notification Ringtone</string>
     <string name="rtoneunset">Ringtone set, Shuffle disabled</string>
     <string name="rtoneset">Ringtone set</string>
@@ -78,6 +78,7 @@
 	<string name="mlwidgettitle">Kancolle Clock Medium Large</string>
 	<string name="reswidgettitle">Kancolle Clock Resizable</string>
 	<string name="secwidgettitle">Kancolle Secretary</string>
+	<string name="widget24hrtext">Use 24hr time on widgets</string>
     
 
 </resources>

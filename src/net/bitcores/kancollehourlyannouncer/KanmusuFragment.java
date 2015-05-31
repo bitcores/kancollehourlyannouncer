@@ -11,7 +11,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
@@ -58,16 +57,8 @@ public class KanmusuFragment extends Fragment {
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		setHasOptionsMenu(false);		
-		
-		Integer layout = null;
-		if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-			layout = R.layout.fragment_kanmusu_land;
-		} else {
-			layout = R.layout.fragment_kanmusu;
-		}
-		
-		rootView = inflater.inflate(layout, container, false);
+		setHasOptionsMenu(false);				
+		rootView = inflater.inflate(R.layout.fragment_kanmusu, container, false);
 		
 		context = getActivity();
 		alarmAdapter = new AlarmAdapter();

@@ -10,6 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:text="@string/kanmusulist" />
 
@@ -19,6 +20,7 @@
 	    android:layout_width="220dp"
 	    android:layout_height="wrap_content"
 	    android:layout_alignLeft="@+id/kanmusutitle"
+	    android:layout_alignStart="@+id/kanmusutitle"
 	    android:layout_below="@+id/kanmusutitle"
 	    android:saveEnabled="false"
 	    android:spinnerMode="dialog" />
@@ -28,16 +30,18 @@
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
 	    android:layout_marginLeft="5dp"
-	    android:layout_below="@+id/kanmususpinner" />  
-        
+	    android:layout_marginStart="5dp"
+	    android:layout_below="@+id/kanmususpinner" />
+ 
     <TextView 
         android:id="@+id/cliptitle"
         style="@style/titletext"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/msgbox"
+        android:layout_above="@+id/playerspinner"
         android:layout_alignLeft="@+id/kanmusutitle"
-        android:layout_marginTop="30dp"
+        android:layout_alignStart="@+id/kanmusutitle"
+        android:layout_marginTop="5dp"
         android:text="@string/soundclips" />
     
     <Spinner
@@ -45,8 +49,9 @@
         style="@style/medtext"
         android:layout_width="220dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/cliptitle"
+        android:layout_above="@+id/playbutton"
         android:layout_alignLeft="@+id/cliptitle"
+        android:layout_alignStart="@+id/cliptitle"
         android:spinnerMode="dialog" />
     
     <Button
@@ -54,35 +59,23 @@
         style="@style/hugebutton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/playerspinner"
-        android:layout_toLeftOf="@+id/stopbutton"
-        android:layout_alignLeft="@+id/playerspinner"
-        android:layout_alignBottom="@+id/stopbutton"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="25dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginRight="5dp"
+        android:layout_marginEnd="5dp"
         android:layout_marginTop="5dp"
-        android:text="@string/play" />
-    
-    <Button
-        android:id="@+id/stopbutton"
-        style="@style/hugebutton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/playerspinner"
-        android:layout_alignRight="@+id/playerspinner"
-        android:layout_marginLeft="25dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginTop="5dp"
-        android:text="@string/stop" />
-    
+        android:text="@string/play" /> 
+        
     <ProgressBar
 	    android:id="@+id/playprogress"
 	    style="?android:attr/progressBarStyleHorizontal"
-	    android:layout_width="220dp"
+	    android:layout_width="150dp"
 	    android:layout_height="10dp"
-	    android:layout_alignLeft="@+id/cliptitle"
-	    android:layout_below="@+id/playbutton"
-	    android:layout_marginTop="10dp" />
+	    android:layout_toRightOf="@+id/playbutton"
+	    android:layout_toEndOf="@+id/playbutton"
+	    android:layout_alignBottom="@+id/playbutton"
+	    android:layout_marginBottom="15dp" />
     
 	<RelativeLayout
 	    android:id="@+id/imagelayout"
@@ -90,7 +83,9 @@
 	    android:layout_height="fill_parent"
 	    android:layout_alignParentBottom="true"
 	    android:layout_toRightOf="@+id/playprogress"
-	    android:layout_marginLeft="10dp" >
+	    android:layout_toEndOf="@+id/playprogress"
+	    android:layout_marginLeft="10dp"
+	    android:layout_marginStart="10dp" >
 	    
 	    <ImageView 
 	        android:id="@+id/leftimage"
@@ -98,6 +93,7 @@
         	android:layout_height="fill_parent"
         	android:layout_centerVertical="true"
         	android:layout_alignParentLeft="true"
+        	android:layout_alignParentStart="true"
         	android:adjustViewBounds="true"
 	        android:scaleType="fitCenter"
         	android:contentDescription="@string/bgdesc" />
@@ -113,7 +109,9 @@
 	        android:layout_alignParentBottom="true"
 	        android:layout_centerHorizontal="true"
 	        android:layout_toRightOf="@+id/leftimage"
+	        android:layout_toEndOf="@+id/leftimage"
 	        android:layout_toLeftOf="@+id/rightimage"        
+	        android:layout_toStartOf="@+id/rightimage"        
 	        android:adjustViewBounds="true"
 	        android:scaleType="fitCenter"
 	        android:contentDescription="@string/bgdesc"
@@ -125,6 +123,7 @@
         	android:layout_height="fill_parent"
         	android:layout_centerVertical="true"
         	android:layout_alignParentRight="true"
+        	android:layout_alignParentEnd="true"
 			android:adjustViewBounds="true"
 	        android:scaleType="fitCenter"
         	android:contentDescription="@string/bgdesc" />

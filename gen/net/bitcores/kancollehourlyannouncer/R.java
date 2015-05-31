@@ -49,64 +49,64 @@ public final class R {
         public static final int bgusesecretarySpinner=0x7f0b0031;
         public static final int bgusetypeSpinner=0x7f0b0032;
         public static final int bottom_menu=0x7f0b0004;
-        public static final int callSpinner=0x7f0b0044;
-        public static final int callSpinnerTitle=0x7f0b0043;
-        public static final int clipsText=0x7f0b001a;
-        public static final int clipsTextTitle=0x7f0b0019;
-        public static final int cliptitle=0x7f0b0049;
+        public static final int callSpinner=0x7f0b0045;
+        public static final int callSpinnerTitle=0x7f0b0044;
+        public static final int clipsText=0x7f0b0019;
+        public static final int clipsTextTitle=0x7f0b0018;
+        public static final int cliptitle=0x7f0b0048;
         public static final int clockBack=0x7f0b0053;
         public static final int clockText=0x7f0b0054;
         public static final int dialogImage=0x7f0b0008;
         public static final int dialogImageLayout=0x7f0b0007;
         public static final int dialogLayout=0x7f0b000e;
         public static final int dialogTitleText=0x7f0b000f;
-        public static final int dirSelect=0x7f0b0014;
-        public static final int dirText=0x7f0b0016;
-        public static final int dirTitle=0x7f0b0015;
+        public static final int dirSelect=0x7f0b0013;
+        public static final int dirText=0x7f0b0015;
+        public static final int dirTitle=0x7f0b0014;
         public static final int drawer_layout=0x7f0b0000;
         public static final int enableButton=0x7f0b0022;
         public static final int enableLayout=0x7f0b001f;
         public static final int enableText=0x7f0b0020;
-        public static final int endTimeLayout=0x7f0b003e;
-        public static final int foundText=0x7f0b0018;
-        public static final int foundTextTitle=0x7f0b0017;
+        public static final int endTimeLayout=0x7f0b003f;
+        public static final int foundText=0x7f0b0017;
+        public static final int foundTextTitle=0x7f0b0016;
         public static final int fragment_frame=0x7f0b0001;
-        public static final int idletypeSpinner=0x7f0b0037;
+        public static final int idletypeSpinner=0x7f0b0038;
         public static final int imagelayout=0x7f0b004d;
-        public static final int kanmusuBgImage=0x7f0b0012;
+        public static final int kanmusuBgImage=0x7f0b0011;
         public static final int kanmusuBgLayout=0x7f0b0010;
-        public static final int kanmusuBgText=0x7f0b0013;
-        public static final int kanmususpinner=0x7f0b0046;
-        public static final int kanmusutitle=0x7f0b0045;
+        public static final int kanmusuBgText=0x7f0b0012;
+        public static final int kanmususpinner=0x7f0b0047;
+        public static final int kanmusutitle=0x7f0b0046;
         public static final int leftimage=0x7f0b004e;
         public static final int logscrollview=0x7f0b0029;
         public static final int logtextview=0x7f0b002a;
-        public static final int mediaSpinner=0x7f0b0039;
-        public static final int mediaSpinnerTitle=0x7f0b0038;
+        public static final int mediaSpinner=0x7f0b003a;
+        public static final int mediaSpinnerTitle=0x7f0b0039;
         public static final int menu_drawer=0x7f0b0002;
         public static final int minuteText=0x7f0b000c;
-        public static final int msgbox=0x7f0b0047;
+        public static final int msgbox=0x7f0b004c;
         public static final int numberPicker=0x7f0b000b;
         public static final int pager=0x7f0b0006;
-        public static final int pickButton=0x7f0b001e;
+        public static final int pickButton=0x7f0b001d;
         public static final int pickerDialogLayout=0x7f0b0009;
         public static final int pickerLayout=0x7f0b000a;
-        public static final int playbutton=0x7f0b004b;
-        public static final int playerspinner=0x7f0b004a;
-        public static final int playidlebootCheckBox=0x7f0b0036;
-        public static final int playprogress=0x7f0b0048;
-        public static final int quietHoursBox=0x7f0b003a;
-        public static final int quietHoursEnd=0x7f0b0040;
-        public static final int quietHoursEndTitle=0x7f0b003f;
-        public static final int quietHoursStart=0x7f0b003d;
-        public static final int quietHoursStartTitle=0x7f0b003c;
-        public static final int quietHoursVolume=0x7f0b0042;
-        public static final int quietHoursVolumeTitle=0x7f0b0041;
+        public static final int playbutton=0x7f0b004a;
+        public static final int playerspinner=0x7f0b0049;
+        public static final int playidlebootCheckBox=0x7f0b0037;
+        public static final int playprogress=0x7f0b004b;
+        public static final int quietHoursBox=0x7f0b003b;
+        public static final int quietHoursEnd=0x7f0b0041;
+        public static final int quietHoursEndTitle=0x7f0b0040;
+        public static final int quietHoursStart=0x7f0b003e;
+        public static final int quietHoursStartTitle=0x7f0b003d;
+        public static final int quietHoursVolume=0x7f0b0043;
+        public static final int quietHoursVolumeTitle=0x7f0b0042;
         public static final int rightimage=0x7f0b0050;
-        public static final int scanButton=0x7f0b001d;
+        public static final int scanButton=0x7f0b001c;
         public static final int secretaryUseText=0x7f0b002f;
         public static final int secretaryUseTitle=0x7f0b002e;
-        public static final int selectAllBox=0x7f0b0011;
+        public static final int selectAllBox=0x7f0b001e;
         public static final int settingsBgImage=0x7f0b002c;
         public static final int settingsBgLayout=0x7f0b002b;
         public static final int settingsBgText=0x7f0b002d;
@@ -116,13 +116,13 @@ public final class R {
         public static final int shuffleSpinner=0x7f0b0026;
         public static final int shuffleViewerText=0x7f0b0028;
         public static final int shuffleViewerTitle=0x7f0b0027;
-        public static final int startTimeLayout=0x7f0b003b;
-        public static final int stopbutton=0x7f0b004c;
+        public static final int startTimeLayout=0x7f0b003c;
         public static final int subText=0x7f0b000d;
         public static final int top_menu=0x7f0b0003;
-        public static final int useText=0x7f0b001c;
-        public static final int useTextTitle=0x7f0b001b;
+        public static final int useText=0x7f0b001b;
+        public static final int useTextTitle=0x7f0b001a;
         public static final int viewerimage=0x7f0b004f;
+        public static final int widget24hrCheckBox=0x7f0b0036;
         public static final int widgetLayout=0x7f0b0051;
         public static final int widgetLinear=0x7f0b0052;
         public static final int widgetsTitle=0x7f0b0033;
@@ -137,18 +137,16 @@ public final class R {
         public static final int dialog_title=0x7f030004;
         public static final int drawer_list_item=0x7f030005;
         public static final int fragment_kanmusu=0x7f030006;
-        public static final int fragment_kanmusu_land=0x7f030007;
-        public static final int fragment_log=0x7f030008;
-        public static final int fragment_secretary=0x7f030009;
-        public static final int fragment_sound=0x7f03000a;
-        public static final int fragment_viewer=0x7f03000b;
-        public static final int fragment_viewer_land=0x7f03000c;
-        public static final int widget_clocklarge=0x7f03000d;
-        public static final int widget_clockmedium=0x7f03000e;
-        public static final int widget_clockmediumlarge=0x7f03000f;
-        public static final int widget_clockresizablel=0x7f030010;
-        public static final int widget_clockresizablem=0x7f030011;
-        public static final int widget_secretary=0x7f030012;
+        public static final int fragment_log=0x7f030007;
+        public static final int fragment_secretary=0x7f030008;
+        public static final int fragment_sound=0x7f030009;
+        public static final int fragment_viewer=0x7f03000a;
+        public static final int widget_clocklarge=0x7f03000b;
+        public static final int widget_clockmedium=0x7f03000c;
+        public static final int widget_clockmediumlarge=0x7f03000d;
+        public static final int widget_clockresizablel=0x7f03000e;
+        public static final int widget_clockresizablem=0x7f03000f;
+        public static final int widget_secretary=0x7f030010;
     }
     public static final class menu {
         public static final int logfragment_actions=0x7f0a0000;
@@ -231,6 +229,7 @@ public final class R {
         public static final int viewererror1=0x7f080017;
         public static final int viewererror2=0x7f080018;
         public static final int viewerkantext=0x7f080020;
+        public static final int widget24hrtext=0x7f08004d;
         public static final int widgetstitletext=0x7f080043;
     }
     public static final class style {
@@ -254,9 +253,19 @@ public final class R {
         res/values-v11/styles.xml on API 14+ devices.
     
  API 14 theme customizations can go here. 
+
+        Base application theme, dependent on API level. This theme is replaced
+        by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
+    
+
+            Theme customizations available in newer API levels can go in
+            res/values-vXX/styles.xml, while customizations related to
+            backward-compatibility can go here.
+        
          */
         public static final int AppBaseTheme=0x7f090000;
         /**  Application theme. 
+ Application theme. 
          */
         public static final int AppTheme=0x7f090001;
         public static final int SpinnerItem=0x7f090002;

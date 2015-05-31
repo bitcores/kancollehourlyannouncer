@@ -5,20 +5,25 @@
     
     <RelativeLayout
         android:id="@+id/kanmusuBgLayout"
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" >
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="200dp"
+        android:layout_marginStart="200dp"
+	    android:layout_marginLeft="200dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginEnd="10dp" >
         
 	    <ImageView
 	        android:id="@+id/kanmusuBgImage"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"       
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"    
 	        android:layout_marginBottom="10dp"
-	        android:layout_above="@+id/kanmusuBgText"
-	        android:maxWidth="400dp"        
+	        android:layout_above="@+id/kanmusuBgText"       
 	        android:adjustViewBounds="true"
-	        android:scaleType="centerInside"
+	        android:scaleType="fitEnd"
 	        android:contentDescription="@string/bgdesc" />
 	    
 	    <TextView
@@ -39,7 +44,8 @@
         android:background="@drawable/back"
         android:padding="3dp"
         android:layout_marginTop="5dp"
-        android:layout_marginLeft="3dp" >
+        android:layout_marginLeft="3dp"
+        android:layout_marginStart="3dp" >
         
 	    <TextView
 	        android:id="@+id/dirTitle"
@@ -53,7 +59,8 @@
 	        style="@style/medtext"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
-	        android:layout_marginLeft="5dp" />
+	        android:layout_marginLeft="5dp"
+	        android:layout_marginStart="5dp" />
 	    
     </LinearLayout>
     
@@ -62,6 +69,7 @@
         style="@style/medtext"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/dirSelect"
         android:layout_alignLeft="@+id/dirSelect"
         android:layout_below="@+id/dirSelect"
         android:layout_marginTop="10dp"
@@ -74,7 +82,9 @@
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/foundTextTitle"
         android:layout_toRightOf="@+id/foundTextTitle"
-        android:layout_marginLeft="5dp" />
+        android:layout_toEndOf="@+id/foundTextTitle"
+        android:layout_marginLeft="5dp"
+        android:layout_marginStart="5dp" />
     
     <TextView
         android:id="@+id/clipsTextTitle"
@@ -82,6 +92,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/dirSelect"
+        android:layout_alignStart="@+id/dirSelect"
         android:layout_below="@+id/foundTextTitle"
         android:layout_marginTop="5dp"
         android:text="@string/numclipstitle" />
@@ -93,7 +104,9 @@
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/clipsTextTitle"
         android:layout_toRightOf="@+id/clipsTextTitle"
-        android:layout_marginLeft="5dp" />
+        android:layout_toEndOf="@+id/clipsTextTitle"
+        android:layout_marginLeft="5dp"
+        android:layout_marginStart="5dp" />
     
     <TextView
         android:id="@+id/useTextTitle"
@@ -101,6 +114,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/dirSelect"
+        android:layout_alignStart="@+id/dirSelect"
         android:layout_below="@+id/clipsTextTitle"
         android:layout_marginTop="5dp"
         android:text="@string/numusetitle" />
@@ -112,13 +126,16 @@
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/useTextTitle"
         android:layout_toRightOf="@+id/useTextTitle"
-        android:layout_marginLeft="5dp" />
+        android:layout_toEndOf="@+id/useTextTitle"
+        android:layout_marginLeft="5dp"
+        android:layout_marginStart="5dp" />
     
     <Button
         android:id="@+id/scanButton"
         style="@style/button"
         android:layout_width="wrap_content"
         android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:layout_alignBottom="@+id/dirSelect"
         android:text="@string/scandir" />
     
@@ -128,6 +145,7 @@
         android:layout_width="wrap_content"
         android:layout_alignBottom="@id/useTextTitle"
         android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:text="@string/pickkanmusu" />
     
     <CheckBox
@@ -137,6 +155,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/pickButton"
         android:layout_alignRight="@+id/pickButton"
+        android:layout_alignEnd="@+id/pickButton"
         android:layout_marginTop="10dp"
         android:text="@string/selectall" />
     
@@ -145,6 +164,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/useTextTitle"
+        android:layout_alignStart="@+id/useTextTitle"
 	    android:layout_below="@+id/useTextTitle"
 	    android:layout_marginTop="5dp"
         >
@@ -160,13 +180,15 @@
 	        style="@style/medtext"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
-	        android:layout_marginLeft="5dp" />  
+	        android:layout_marginLeft="5dp"
+	        android:layout_marginStart="5dp" />  
 	    	
 	    <Button
 	        android:id="@+id/enableButton"
 	        style="@style/button"
 	        android:layout_width="wrap_content"
 	        android:layout_marginLeft="10dp"
+	        android:layout_marginStart="10dp"
 	        android:textAllCaps="true" />
     </LinearLayout>
     
@@ -176,6 +198,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/enableLayout"
+        android:layout_alignStart="@+id/enableLayout"
         android:layout_below="@+id/enableLayout"
         android:layout_marginTop="40dp"
         android:text="@string/shufflesettingstitle" />
@@ -186,6 +209,7 @@
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
 	    android:layout_alignLeft="@+id/shuffleSettingsTitle"
+	    android:layout_alignStart="@+id/shuffleSettingsTitle"
 	    android:layout_below="@+id/shuffleSettingsTitle"
 	    android:layout_marginTop="10dp"
 	    android:text="@string/useshuffle"
@@ -197,8 +221,10 @@
 	    android:layout_width="wrap_content"
 	    android:layout_below="@+id/shuffleBox"
 	    android:layout_alignLeft="@+id/shuffleBox"
+	    android:layout_alignStart="@+id/shuffleBox"
 	    android:layout_marginTop="5dp"
 	    android:layout_marginLeft="5dp"
+	    android:layout_marginStart="5dp"
 	    android:text="@string/shuffleclipselectiontext" />
 	
 	<Spinner
@@ -206,6 +232,7 @@
 	    android:layout_width="220dp"
 	    android:layout_height="wrap_content"
 	    android:layout_alignLeft="@+id/shuffleClipSelection"
+	    android:layout_alignStart="@+id/shuffleClipSelection"
 	    android:layout_below="@+id/shuffleClipSelection"
 	    android:layout_marginTop="5dp"
 	    android:prompt="@string/shufflespinner"
@@ -219,6 +246,7 @@
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
 	    android:layout_alignLeft="@+id/shuffleSpinner"
+	    android:layout_alignStart="@+id/shuffleSpinner"
 	    android:layout_below="@+id/shuffleSpinner"
 	    android:layout_marginTop="5dp"
 	    android:text="@string/viewerkantext" />
@@ -230,7 +258,9 @@
 	    android:layout_height="wrap_content"
 	    android:layout_alignBottom="@+id/shuffleViewerTitle"
 	    android:layout_toRightOf="@+id/shuffleViewerTitle"
+	    android:layout_toEndOf="@+id/shuffleViewerTitle"
 	    android:layout_marginLeft="5dp"	    
+	    android:layout_marginStart="5dp"	    
 	    android:saveEnabled="false" />
 		
 </RelativeLayout>

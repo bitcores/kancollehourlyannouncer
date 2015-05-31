@@ -40,6 +40,7 @@ public class SecretaryFragment extends Fragment {
 		settingsAdapter = new SettingsAdapter();
 		
 		TextView secretaryUseText = (TextView)rootView.findViewById(R.id.secretaryUseText);
+		CheckBox widget24hrCheckBox = (CheckBox)rootView.findViewById(R.id.widget24hrCheckBox);
 		CheckBox playidlebootCheckBox = (CheckBox)rootView.findViewById(R.id.playidlebootCheckBox);
 		Spinner bgusesecretarySpinner = (Spinner)rootView.findViewById(R.id.bgusesecretarySpinner);
 		Spinner bgusetypeSpinner = (Spinner)rootView.findViewById(R.id.bgusetypeSpinner);
@@ -62,6 +63,23 @@ public class SecretaryFragment extends Fragment {
 		
 		widgetusetypeSpinner.setSelection(SettingsAdapter.secretary_widgetimgtype);
 		widgetusetypeSpinner.setOnItemSelectedListener(spinnerListener);
+		
+		if (SettingsAdapter.widget_24hr == 1) {
+			widget24hrCheckBox.setChecked(true);
+		}
+		widget24hrCheckBox.setOnClickListener(new OnClickListener(){
+			@Override
+			public void onClick(View view) {
+				CheckBox v = (CheckBox)view;
+				if(v.isChecked()) {
+					SettingsAdapter.widget_24hr = 1;
+				} else {
+					SettingsAdapter.widget_24hr = 0;
+				}
+				
+				settingsAdapter.updateWidgets(context);
+			}			
+		});
 		
 		if (SettingsAdapter.boot_idle == 1) {
 			playidlebootCheckBox.setChecked(true);

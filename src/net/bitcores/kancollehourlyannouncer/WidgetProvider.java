@@ -15,6 +15,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.widget.RemoteViews;
 
 public class WidgetProvider extends AppWidgetProvider {
@@ -37,6 +38,14 @@ public class WidgetProvider extends AppWidgetProvider {
 
 		sendUpdate(context, appWidgetManager, appWidgetIds);
 	}
+	
+	// http://stackoverflow.com/questions/8309354/formula-px-to-dp-dp-to-px-android
+	private int dpToPx(Context context, int dp) {
+	    DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
+	    int px = Math.round(dp * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));       
+	    return px;
+	}
+	// ============================================================================
 	
 	@SuppressLint("InlinedApi")
 	public void sendUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
@@ -62,7 +71,11 @@ public class WidgetProvider extends AppWidgetProvider {
 				
 		//	UPDATE CLOCK
 		Calendar cal = Calendar.getInstance();
-		SimpleDateFormat f = new SimpleDateFormat("HH:mm", Locale.US);
+		String format = "HH:mm";
+		if (SettingsAdapter.widget_24hr == 0) {
+			format = "h:mm a";
+		}
+		SimpleDateFormat f = new SimpleDateFormat(format, Locale.US);
 		String currentTime = f.format(cal.getTimeInMillis());
 		
 		if (SettingsAdapter.enabled == 0 || (Calendar.MINUTE != 59 && SettingsAdapter.enabled == 1)) {
@@ -90,13 +103,13 @@ public class WidgetProvider extends AppWidgetProvider {
 			AppWidgetProviderInfo appWidgetProviderInfo = appWidgetManager.getAppWidgetInfo(appWidgetId);
 			String label = appWidgetProviderInfo.label;
 			
-			if (WIDGET_MEDIUM.equals(label)) {
+			if (label.equals(WIDGET_MEDIUM)) {
 				widgetView = new RemoteViews(context.getPackageName(), R.layout.widget_clockmedium);
-			} else if (WIDGET_LARGE.equals(label)) {
-				widgetView = new RemoteViews(context.getPackageName(), R.layout.widget_clocklarge);
-			} else if (WIDGET_MEDLRG.equals(label)) {
+			} else if (label.equals(WIDGET_MEDLRG)) {
 				widgetView = new RemoteViews(context.getPackageName(), R.layout.widget_clockmediumlarge);
-			} else if (WIDGET_SECRET.equals(label)) {
+			} else if (label.equals(WIDGET_LARGE)) {
+				widgetView = new RemoteViews(context.getPackageName(), R.layout.widget_clocklarge);
+			} else if (label.equals(WIDGET_SECRET)) {
 				widgetView = new RemoteViews(context.getPackageName(), R.layout.widget_secretary);
 			} else {
 				widgetView = null;
@@ -109,60 +122,70 @@ public class WidgetProvider extends AppWidgetProvider {
 				} else {
 					filepath = settingsAdapter.getSecretary("widget", "widget");
 				}
+				
 				if (filepath != null) {
 					Bitmap cropped = null;
 					Bitmap bitmap = bitmapAdapter.getBitmap(filepath);
 					int width = bitmap.getWidth();
 					int height = bitmap.getHeight();
-									
-					if (label.equals(WIDGET_MEDLRG) || label.equals(WIDGET_RESIZE)) {
-						if (label.equals(WIDGET_MEDLRG)) {
-							width = 398;
-							cropped = Bitmap.createBitmap(bitmap, 0, 0, width, height);						
-						} else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-							// The resizable widget shoud only be running if the android version is at least jellybean anyway but
-							// this should make it so that the minimum sdk version can safely be 13 again
-							Bundle options = appWidgetManager.getAppWidgetOptions(appWidgetId);
-							int widgetWidth = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH);
-							int widgetHeight = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT);
-							int hCells = widgetHeight / 50;
-							int wCells = widgetWidth / 90;
-							
-							// This is all fuggly mucking around trying to make shit work
-							// There may be a better way of doing this, but I couldn't find any
-							// The best way probably would have been to go through and make cropped versions of the image being used
-							// for every ship with different layout files for each size
-							
-							if (hCells < 2) {
-								if (wCells <=3) {
-									width = 600;
-								}
-								widgetView = new RemoteViews(context.getPackageName(), R.layout.widget_clockresizablem);
-	
-								cropped = Bitmap.createBitmap(bitmap, 0, 0, width, height);
-							} else {
-								width = 1099;
-								if (wCells == 5) {
-									width = 1091;
-								}
-								if (wCells == 4) {
-									width = 810;
-								}
-								if (wCells <= 3) {
-									width = 650;
-								}
-								widgetView = new RemoteViews(context.getPackageName(), R.layout.widget_clockresizablel);
-								
-								Bitmap scaled = Bitmap.createScaledBitmap(bitmap, 1099, 200, true);
-								cropped = Bitmap.createBitmap(scaled, 0, 0, width, 200);
-								scaled.recycle();
-							}	
-						}						
+					
+					if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+						// The resizable widget shoud only be running if the android version is at least jellybean anyway but
+						// this should make it so that the minimum sdk version can safely be 13 again
+						Bundle options = appWidgetManager.getAppWidgetOptions(appWidgetId);
+						int widgetWidth = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH);
+						int widgetHeight = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT);
+						// If this gets called too early the widget width/height may be 0 and cause a crash
+						if (widgetWidth <= 0 || widgetHeight <= 0) {
+							return;
+						}
 						
-						widgetView.setImageViewBitmap(R.id.clockBack, cropped);
+						int hCells = (widgetHeight - 30) / 70 + 1;
+						
+						Double targetHeight = dpToPx(context, widgetHeight) * 0.7;
+						Double ratio = targetHeight / bitmap.getHeight();
+						int targetWidth = dpToPx(context, widgetWidth);
+						
+						int scaleHeight = targetHeight.intValue();
+						int scaleWidth = (int)Math.round((Double)(bitmap.getWidth() * ratio));
+						
+						if (label.equals(WIDGET_MEDLRG)) {
+							targetWidth = dpToPx(context, 250);
+						}							
+						
+						Bitmap scaled = Bitmap.createScaledBitmap(bitmap, scaleWidth, scaleHeight, true);
+						
+						if (label.equals(WIDGET_RESIZE) || label.equals(WIDGET_MEDLRG)) {
+											
+							if (label.equals(WIDGET_RESIZE)) {
+								if (hCells == 1) {
+									widgetView = new RemoteViews(context.getPackageName(), R.layout.widget_clockresizablem);								
+								} else {							
+									widgetView = new RemoteViews(context.getPackageName(), R.layout.widget_clockresizablel);						
+								}
+							}
+							
+							if (targetWidth < scaleWidth) {
+								cropped = Bitmap.createBitmap(scaled, 0, 0, targetWidth, scaleHeight);
+								widgetView.setImageViewBitmap(R.id.clockBack, cropped);
+							} else {
+								widgetView.setImageViewBitmap(R.id.clockBack, scaled);
+							}
+							
+						} else {
+							widgetView.setImageViewBitmap(R.id.clockBack, scaled);
+						}
+	
 					} else {
-						widgetView.setImageViewBitmap(R.id.clockBack, bitmap);
-					}
+						if (label.equals(WIDGET_MEDLRG)) {
+							width = dpToPx(context, 250);
+
+							cropped = Bitmap.createBitmap(bitmap, 0, 0, width, height);
+							widgetView.setImageViewBitmap(R.id.clockBack, cropped);
+						} else {
+							widgetView.setImageViewBitmap(R.id.clockBack, bitmap);
+						}
+					} 				
 				
 					Intent secretaryIntent = new Intent(context, AnnounceService.class);
 					secretaryIntent.putExtra("TYPE", "secretary");

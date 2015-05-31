@@ -11,7 +11,6 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.app.Fragment;
-import android.content.res.Configuration;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -26,6 +25,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -38,6 +38,7 @@ public class ViewerFragment extends Fragment {
 
 	private static Activity context;		
 	private static View rootView;
+	private static RelativeLayout imageLayout;
 	private static TextView msgBox;
 	private static Spinner playerSpinner;
 	private static Spinner kanmusuSpinner;
@@ -45,13 +46,13 @@ public class ViewerFragment extends Fragment {
 	private static ImageView leftImage;
 	private static ImageView rightImage;
 	private static Button playButton;
-	private static Button stopButton;
 	
 	private static String currentKanmusu;
 	private static String currentDir;
 	private static Integer currentId;
 	private static Integer currentView;
 	private static Integer currentImg;
+	private static Boolean isPlaying = false;
 	
 	public static ProgressBar pb;
 	
@@ -66,22 +67,15 @@ public class ViewerFragment extends Fragment {
 		
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		setHasOptionsMenu(true);
-		
-		Integer layout = null;
-		if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-			layout = R.layout.fragment_viewer_land;
-		} else {
-			layout = R.layout.fragment_viewer;
-		}
-		
-		rootView = inflater.inflate(layout, container, false);
+		setHasOptionsMenu(true);		
+		rootView = inflater.inflate(R.layout.fragment_viewer, container, false);
 
 		context = getActivity();
 		audioAdapter = new AudioAdapter();
 		settingsAdapter = new SettingsAdapter();
 		bitmapAdapter = new BitmapAdapter();
 		
+		imageLayout = (RelativeLayout)rootView.findViewById(R.id.imagelayout);
 		pb = (ProgressBar)rootView.findViewById(R.id.playprogress);
 		kanmusuSpinner = (Spinner)rootView.findViewById(R.id.kanmususpinner);
 		playerSpinner = (Spinner)rootView.findViewById(R.id.playerspinner);
@@ -90,7 +84,6 @@ public class ViewerFragment extends Fragment {
 		leftImage = (ImageView)rootView.findViewById(R.id.leftimage);
 		rightImage = (ImageView)rootView.findViewById(R.id.rightimage);
 		playButton = (Button)rootView.findViewById(R.id.playbutton);
-		stopButton = (Button)rootView.findViewById(R.id.stopbutton);
 		
 		leftImage.setOnClickListener(imageChangeListener);
 		rightImage.setOnClickListener(imageChangeListener);
@@ -119,15 +112,13 @@ public class ViewerFragment extends Fragment {
 		playButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				playClip(nameList.get(currentId));
+				if (!isPlaying) {
+					playClip(nameList.get(currentId));
+				} else {
+					stopClip();
+				}
 			}		
 		});	
-		stopButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				stopClip();
-			}		
-		});
 		
 		if (savedInstanceState == null) {
 			currentKanmusu = SettingsAdapter.hourly_kanmusu;
@@ -187,6 +178,8 @@ public class ViewerFragment extends Fragment {
 		if (SettingsAdapter.full_list.size() == 0) {
 			kanmusuSpinner.setEnabled(false);
 			playerSpinner.setEnabled(false);
+			playButton.setEnabled(false);
+			imageLayout.setVisibility(View.INVISIBLE);
 			imageList.clear();
 			clipList.clear();
 			nameList.clear();
@@ -201,12 +194,12 @@ public class ViewerFragment extends Fragment {
 		} else { 
 			kanmusuSpinner.setEnabled(true);
 			playerSpinner.setEnabled(true);
+			playButton.setEnabled(true);
+			imageLayout.setVisibility(View.VISIBLE);
 			kanmusuSpinner.setSelection(SettingsAdapter.full_list.indexOf(currentKanmusu));
 			msgBox.setText("");
-		}
+		}		
 		
-		playButton.setEnabled(false);
-		stopButton.setEnabled(false);
 	}
 	
 	private void generateViewer() {
@@ -271,8 +264,8 @@ public class ViewerFragment extends Fragment {
 		Boolean result = audioAdapter.playAudio(context, "file", 0, null, filePath);
 		
 		if (result) {
-			playButton.setEnabled(false);
-			stopButton.setEnabled(true);
+			playButton.setText(getResources().getString(R.string.stop));
+			isPlaying = true;
 		} else {
 			
 		}
@@ -282,8 +275,7 @@ public class ViewerFragment extends Fragment {
 	private void stopClip() {		
 		Boolean result = audioAdapter.stopAudio(1);
 		if (result) {
-			playButton.setEnabled(true);
-			stopButton.setEnabled(false);
+
 		} else {
 			
 		}
@@ -333,8 +325,8 @@ public class ViewerFragment extends Fragment {
 			};
 			handler.postDelayed(notification, 1000);
 		} else {
-			playButton.setEnabled(true);
-			stopButton.setEnabled(false);
+			playButton.setText(context.getResources().getString(R.string.play));
+			isPlaying = false;
 		}
 	}
 	
